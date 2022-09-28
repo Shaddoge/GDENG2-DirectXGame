@@ -1,4 +1,5 @@
 #include "AppWindow.h"
+#include <Windows.h>
 
 struct vec3
 {
@@ -8,7 +9,15 @@ struct vec3
 struct vertex
 {
 	vec3 position;
+	vec3 position1;
 	vec3 color;
+	vec3 color1;
+};
+
+__declspec(align(16))
+struct constant
+{
+	unsigned int m_time;
 };
 
 AppWindow::AppWindow()
@@ -31,55 +40,36 @@ void AppWindow::OnCreate()
 	m_swap_chain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
 	vertex rectangle_0[] = {
-		// X - Y - Z				Color
-		{-0.75f,-0.125f, 0.0f,		1,0,0},
-		{-0.75f, 0.125f, 0.0f,		0,1,0},
-		{-0.25f,-0.125f, 0.0f,		0,0,1},
-		{-0.25f, 0.125f, 0.0f,		1,1,0}
-	};
-
-	vertex triangle_0[] = {
-		// X - Y - Z				Color
-		{-0.1f,-0.075f, 0.0f,		1,0,0},
-		{ 0.0f, 0.075f, 0.0f,		0,0,1},
-		{ 0.1f,-0.075f, 0.0f,		0,1,0}, 
-		
-	};
-
-	vertex rectangle_1[] = {
-		// X - Y - Z				Color
-		{0.25f,-0.125f, 0.0f,		0,1,0},
-		{0.25f, 0.125f, 0.0f,		0,1,0},
-		{0.75f,-0.125f, 0.0f,		0,1,0},
-		{0.75f, 0.125f, 0.0f,		0,1,0}
+		// X - Y - Z										Color
+		{-0.5f,-0.5f, 0.0f,		-0.32f,-0.11f, 0.0f,		0,0,0,	0,1,0},
+		{-0.5f, 0.5f, 0.0f,		-0.11f, 0.78f, 0.0f,		1,1,0,	0,1,1},
+		{ 0.5f,-0.5f, 0.0f,		 0.75f,-0.73f, 0.0f,		0,0,1,	1,0,0},
+		{ 0.5f, 0.5f, 0.0f,		 0.88f, 0.77f, 0.0f,		1,1,1,	0,0,1}
 	};
 
 	m_vb_0 = GraphicsEngine::Get()->CreateVertexBuffer();
-	m_vb_1 = GraphicsEngine::Get()->CreateVertexBuffer();
-	m_vb_2 = GraphicsEngine::Get()->CreateVertexBuffer();
-
 	UINT size_list_0 = ARRAYSIZE(rectangle_0);
-	UINT size_list_1 = ARRAYSIZE(triangle_0);
-	UINT size_list_2 = ARRAYSIZE(rectangle_1);
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
 
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-	
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
 	m_vb_0->Load(rectangle_0, sizeof(vertex), size_list_0, shader_byte_code, size_shader);
-	m_vb_1->Load(triangle_0, sizeof(vertex), size_list_1, shader_byte_code, size_shader);
-	m_vb_2->Load(rectangle_1, sizeof(vertex), size_list_2, shader_byte_code, size_shader);
 	GraphicsEngine::Get()->ReleaseCompiledShader();
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-
 	m_ps = GraphicsEngine::Get()->CreatePixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::Get()->ReleaseCompiledShader(); 
 
+	// Constant Buffer
+	constant cc;
+	cc.m_time = 0;
+
+	m_cb = GraphicsEngine::Get()->CreateConstantBuffer();
+	m_cb->Load(&cc, sizeof(constant));
 }
 
 void AppWindow::OnUpdate()
@@ -90,6 +80,14 @@ void AppWindow::OnUpdate()
 	// Set viewport of render
 	RECT rc = this->GetClientWindowRect();
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+	constant cc;
+	cc.m_time = ::GetTickCount();
+
+	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
+
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_vs, m_cb);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_ps, m_cb);
+
 	// Set default shader in graphics pipeline
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_vs);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_ps);
@@ -97,14 +95,6 @@ void AppWindow::OnUpdate()
 	// Object 0
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_0);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_vb_0->GetSizeVertexList(), 0);
-	
-	// Object 1
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_1);
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_vb_1->GetSizeVertexList(), 0);
-
-	// Object 2
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_2);
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_vb_2->GetSizeVertexList(), 0);
 
 	m_swap_chain->Present(true);
 }
@@ -113,8 +103,6 @@ void AppWindow::OnDestroy()
 {
 	Window::OnDestroy();
 	m_vb_0->Release();
-	m_vb_1->Release();
-	m_vb_2->Release();
 	m_swap_chain->Release();
 	m_vs->Release();
 	m_ps->Release();
