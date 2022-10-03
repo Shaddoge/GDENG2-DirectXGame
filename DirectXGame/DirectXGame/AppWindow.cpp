@@ -17,7 +17,7 @@ struct vertex
 __declspec(align(16))
 struct constant
 {
-	unsigned int m_time;
+	float m_angle;
 };
 
 AppWindow::AppWindow()
@@ -66,7 +66,7 @@ void AppWindow::OnCreate()
 
 	// Constant Buffer
 	constant cc;
-	cc.m_time = 0;
+	cc.m_angle  = 0;
 
 	m_cb = GraphicsEngine::Get()->CreateConstantBuffer();
 	m_cb->Load(&cc, sizeof(constant));
@@ -80,8 +80,16 @@ void AppWindow::OnUpdate()
 	// Set viewport of render
 	RECT rc = this->GetClientWindowRect();
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+	
+	unsigned long new_time = 0;
+	if (m_old_time)
+		new_time = ::GetTickCount() - m_old_time;
+	m_delta_time = new_time / 1000.0f;
+	m_old_time = ::GetTickCount();
+
+	m_angle += 1.57f * m_delta_time;
 	constant cc;
-	cc.m_time = ::GetTickCount();
+	cc.m_angle = m_angle;
 
 	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
 
