@@ -8,6 +8,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "Quad.h"
+#include "EngineTime.h"
 
 class AppWindow : public Window
 {
@@ -22,6 +23,7 @@ public:
 private:
 	SwapChain* m_swap_chain;
 private:
-	Quad* quad_0;
+	Quad* quad;
+	//Quad* quads[3];
 };
 

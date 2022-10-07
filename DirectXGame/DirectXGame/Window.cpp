@@ -78,10 +78,9 @@ bool Window::Init()
 
 bool Window::Broadcast()
 {
-    MSG msg;
-
+    EngineTime::LogFrameStart();
     this->OnUpdate();
-
+    MSG msg;
     while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0)
     {
         TranslateMessage(&msg);
@@ -89,7 +88,7 @@ bool Window::Broadcast()
     }
 
     Sleep(1);
-
+    EngineTime::LogFrameEnd();
     return true;
 }
 
