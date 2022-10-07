@@ -22,13 +22,27 @@ void AppWindow::OnCreate()
 	RECT rc = this->GetClientWindowRect();
 	m_swap_chain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 	
+	// Slide 13
 	vertex quad_vertices[4] = {
 		{-0.75,-0.8,  0.0,	-0.3, 0.0, 0.0f,  0.1, 0.0, 0.0,  0,1,0},
 		{-0.9,  0.2,  0.0,	-0.1, 0.8, 0.0f,  1.0, 0.9, 0.0,  1,1,0},
 		{ 0.1, -0.25, 0.0,	 0.8,-0.6, 0.0f,  0.0, 0.0, 1.0,  1,0,0},
 		{ 0.05, 0.21, 0.0,	 0.9, 0.8, 0.0f,  1.0, 1.0, 1.0,  0,0,1}
 	};
+
+	// Slide 14
+	/*vertex quad_vertices[4] = {
+		{-0.7, -0.9,  0.0,	-0.3, 0.0, 0.0f,  0.1, 0.0, 0.0,  0,1,0},
+		{-0.9,  0.2,  0.0,	-0.1, 0.8, 0.0f,  1.0, 0.9, 0.0,  1,1,0},
+		{ 1.0, -0.2, 0.0,	 0.0,-0.6, 0.0f,  0.0, 0.0, 2.0,  1,0,0},
+		{-0.7, -0.9, 0.0,	 0.9, 0.78,0.0f,  1.0, 1.0, 1.0,  0,0,1}
+	};*/
+	
 	quad = new Quad(quad_vertices);
+
+	// For Slide 13
+	quad->SetFixedTime(false);
+
 	// Quad with dimension
 	/*vec2 quad_dimension = {1, 0.5f};
 	vec3 quad_off[2] = {{0,0,0}, {0.3,0.3,0}};

@@ -100,17 +100,24 @@ Quad::Quad(vertex vertex_list[4])
 void Quad::Update()
 {
 	m_delta_time = EngineTime::GetDeltaTime();
-	float multiplied_time = m_delta_time * m_time_multiplier;
-	m_time_multiplier = abs(sinf(m_time_tracker)) * 8;
-	m_time_tracker += m_delta_time * 0.2f;
+	if (m_fixed_time)
+		m_angle += 1.57f * m_delta_time;
+	else
+	{
+		float multiplied_time = m_delta_time * m_time_multiplier;
+		m_time_multiplier = abs(sinf(m_time_tracker)) * 8;
+		m_time_tracker += m_delta_time * 0.2f;
 
-	//unsigned long new_time = 0;
-	//if (m_old_time)
-	//	new_time = ::GetTickCount() - m_old_time;
-	//m_delta_time = new_time / 1000.0f;
-	//m_old_time = ::GetTickCount();
+		m_angle += 1.57f * multiplied_time;
+	}
 
-	/*if (m_add_multiplier == true)
+	/*unsigned long new_time = 0;
+	if (m_old_time)
+		new_time = ::GetTickCount() - m_old_time;
+	m_delta_time = new_time / 1000.0f;
+	m_old_time = ::GetTickCount();
+
+	if (m_add_multiplier == true)
 	{
 		m_time_multiplier += m_delta_time;
 		if (m_time_multiplier >= 10.0f)
@@ -127,8 +134,6 @@ void Quad::Update()
 		}
 	}*/
 		
-	m_angle += 1.57f * multiplied_time;
-	
 	constant cc;
 	cc.m_angle = m_angle;
 
@@ -144,6 +149,11 @@ void Quad::Update()
 	// Object 0
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_vb->GetSizeVertexList(), 0);
+}
+
+void Quad::SetFixedTime(bool fixed)
+{
+	this->m_fixed_time = fixed;
 }
 
 Quad::~Quad()

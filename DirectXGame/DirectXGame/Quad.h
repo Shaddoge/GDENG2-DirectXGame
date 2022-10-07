@@ -37,8 +37,8 @@ public:
 	Quad();
 	Quad(vec2 dimension, vec3 off_pos[2]);
 	Quad(vertex vertex_list[4]);
-	
 	void Update();
+	void SetFixedTime(bool fixed);
 	~Quad();
 public:
 	VertexBuffer GetVertexBuffer();
@@ -52,7 +52,8 @@ private:
 	float m_delta_time = 0.0f;
 	float m_angle = 0.0f;
 	float m_time_multiplier = 1.0f;
-	bool m_add_multiplier = true;
 	float m_time_tracker = 0.0f;
+	bool m_add_multiplier = true;
+	bool m_fixed_time = true;
 };
 

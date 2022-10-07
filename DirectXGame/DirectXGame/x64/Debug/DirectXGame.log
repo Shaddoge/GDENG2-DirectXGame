@@ -1,4 +1,4 @@
 ﻿  AppWindow.cpp
 C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.h(51,29): warning C4244: 'initializing': conversion from 'float' to 'unsigned long', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(30,2): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(39,2): warning C4305: 'initializing': truncation from 'double' to 'float'
   DirectXGame.vcxproj -> C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\x64\Debug\DirectXGame.exe
