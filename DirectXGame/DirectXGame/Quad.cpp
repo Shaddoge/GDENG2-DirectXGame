@@ -2,13 +2,15 @@
 
 Quad::Quad()
 {
-	vertex vertex_list[4] = {
+	EventManager::BindEvent("Mouse", this);
+	quad_vertex vertex_list[4] = {
 		// X - Y - Z										Color
 		{-0.25f,-0.25f, 0.0f,		-0.25f,-0.25f, 0.0f,		1,0,0,	0,0,1},
 		{-0.25f, 0.25f, 0.0f,		-0.25f, 0.25f, 0.0f,		0,1,0,	0,1,1},
 		{ 0.25f,-0.25f, 0.0f,		 0.25f,-0.25f, 0.0f,		0,0,1,	1,0,0},
 		{ 0.25f, 0.25f, 0.0f,		 0.25f, 0.25f, 0.0f,		0,0,0,	1,1,1}
 	};
+
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
 	UINT size_list = ARRAYSIZE(vertex_list);
 
@@ -18,7 +20,7 @@ Quad::Quad()
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_vb->Load(&vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	m_vb->Load(&vertex_list, sizeof(quad_vertex), size_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
@@ -36,9 +38,10 @@ Quad::Quad()
 // With offset positioning
 Quad::Quad(vec2 dimension, vec3 off_pos[2])
 {
+	EventManager::BindEvent("Mouse", this);
 	float x_half = dimension.x / 2;
 	float y_half = dimension.y / 2;
-	vertex vertex_list[4] = {
+	quad_vertex vertex_list[4] = {
 		
 		// X - Y - Z																											Color
 		{-x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f,		-x_half + off_pos[1].x,-y_half + off_pos[1].y, 0.0f,		1,0,0,	0,0,1},
@@ -46,7 +49,7 @@ Quad::Quad(vec2 dimension, vec3 off_pos[2])
 		{ x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f,		 x_half + off_pos[1].x,-y_half + off_pos[1].y, 0.0f,		0,0,1,	1,0,0},
 		{ x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f,		 x_half + off_pos[1].x, y_half + off_pos[1].y, 0.0f,		0,0,0,	1,1,1}
 	};
-
+	
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
 	UINT size_list = ARRAYSIZE(vertex_list);
 
@@ -56,7 +59,7 @@ Quad::Quad(vec2 dimension, vec3 off_pos[2])
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_vb->Load(&vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	m_vb->Load(&vertex_list, sizeof(quad_vertex), size_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
@@ -71,8 +74,9 @@ Quad::Quad(vec2 dimension, vec3 off_pos[2])
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(vertex vertex_list[4])
+Quad::Quad(quad_vertex vertex_list[4])
 {
+	EventManager::BindEvent("Mouse", this);
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
 	UINT size_list = 4;
 
@@ -82,7 +86,7 @@ Quad::Quad(vertex vertex_list[4])
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_vb->Load(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	m_vb->Load(vertex_list, sizeof(quad_vertex), size_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
@@ -158,12 +162,27 @@ void Quad::SetFixedTime(bool fixed)
 
 Quad::~Quad()
 {
+	EventManager::UnbindEvent("Mouse", this);
 	m_vb->Release();
 	m_vs->Release();
 	m_ps->Release();
 }
 
+void Quad::Invoke(vec2 pos)
+{
+	cout << pos.x << "," << pos.y << endl;
+	POINT point_pos = { pos.x, pos.y };
+	OnDrag(point_pos);
+}
+
 VertexBuffer Quad::GetVertexBuffer()
 {
 	return *m_vb;
+}
+
+void Quad::OnDrag(POINT mouse_pos)
+{
+	m_offset = { m_delta_time * mouse_pos.x, m_delta_time * mouse_pos.y };
+	std::cout << m_offset.x << "," << m_offset.y << std::endl;
+	//std::cout << "Drag!" << std::endl;
 }

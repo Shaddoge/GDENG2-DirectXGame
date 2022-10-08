@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "EngineTime.h"
+#include "Mouse.h"
 
 class Window
 {
@@ -20,7 +21,6 @@ public:
 	virtual void OnCreate();
 	virtual void OnUpdate();
 	virtual void OnDestroy();
-
 	~Window();
 protected:
 	HWND m_hwnd;

@@ -37,6 +37,12 @@
     <Filter Include="GameEngine\GraphicsEngine\EngineTime">
       <UniqueIdentifier>{8ddd41d2-4bc4-44d3-9b4c-96b241e04571}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Input">
+      <UniqueIdentifier>{64ff8e40-7d12-4d60-844a-0568f65bca79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\EventSystem">
+      <UniqueIdentifier>{d0201b79-1262-4fc4-a464-8ef8dcb3d3a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,6 +81,15 @@
     <ClCompile Include="EngineTime.cpp">
       <Filter>GameEngine\GraphicsEngine\EngineTime</Filter>
     </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>GameEngine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>GameEngine\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="EventListener.cpp">
+      <Filter>GameEngine\EventSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -109,6 +124,18 @@
     </ClInclude>
     <ClInclude Include="EngineTime.h">
       <Filter>GameEngine\GraphicsEngine\EngineTime</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>GameEngine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>GameEngine\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventListener.h">
+      <Filter>GameEngine\EventSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

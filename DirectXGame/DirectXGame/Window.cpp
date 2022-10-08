@@ -10,6 +10,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {
+    case WM_LBUTTONDOWN:
+    {   
+        RECT rect;
+        GetClientRect(hwnd, &rect);
+        //std::cout << rect.right << "," << rect.bottom << std::endl;
+        Mouse::SetDown(MouseInputType::L, true);
+        break;
+    }
+    case WM_LBUTTONUP:
+    {
+        Mouse::SetDown(MouseInputType::L, false);
+        break;
+    }
+    case WM_MOUSEMOVE: {
+        if (Mouse::GetIsDown(MouseInputType::L))
+        {
+            POINT new_pos = { LOWORD(lparam), HIWORD(lparam) };
+            Mouse::OnDrag(new_pos);
+        }
+        break;
+    }
     case WM_CREATE:
     {
         // Create Event

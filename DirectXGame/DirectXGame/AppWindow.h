@@ -9,6 +9,8 @@
 #include "PixelShader.h"
 #include "Quad.h"
 #include "EngineTime.h"
+#include "Mouse.h"
+#include "EventManager.h"
 
 class AppWindow : public Window
 {
