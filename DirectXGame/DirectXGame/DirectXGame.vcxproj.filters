@@ -75,9 +75,6 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="Quad.cpp">
-      <Filter>GameEngine\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="EngineTime.cpp">
       <Filter>GameEngine\GraphicsEngine\EngineTime</Filter>
     </ClCompile>
@@ -89,6 +86,18 @@
     </ClCompile>
     <ClCompile Include="EventListener.cpp">
       <Filter>GameEngine\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>GameEngine\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="EventListener.h">
       <Filter>GameEngine\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>App</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

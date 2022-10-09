@@ -15,7 +15,7 @@ void EventManager::Initialize()
 	sharedInstance = new EventManager();
 }
 
-void EventManager::BindEvent(string name, EventListener* listener)
+void EventManager::BindListener(string name, EventListener* listener)
 {
 	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
@@ -28,11 +28,9 @@ void EventManager::BindEvent(string name, EventListener* listener)
 		new_list.push_back(listener);
 		sharedInstance->binded_events.insert(make_pair(name, new_list));
 	}
-	//sharedInstance->binded_listener.push_back(listener);
-	//cout << sharedInstance->binded_listener.size() << endl;
 }
 
-void EventManager::UnbindEvent(string name, EventListener* listener)
+void EventManager::UnbindListener(string name, EventListener* listener)
 {
 	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
@@ -43,9 +41,6 @@ void EventManager::UnbindEvent(string name, EventListener* listener)
 			sharedInstance->binded_events.erase(iterator);
 		}
 	}
-
-	//sharedInstance->binded_listener.remove(listener);
-	//cout << sharedInstance->binded_listener.size() << endl;
 }
 
 void EventManager::Invoke(string name)
@@ -55,7 +50,7 @@ void EventManager::Invoke(string name)
 	{
 		for (auto const& listener : iterator->second)
 		{
-			listener->Invoke();
+			listener->Receive(name);
 		}
 	}
 }
@@ -67,7 +62,7 @@ void EventManager::Invoke(string name, bool value)
 	{
 		for (auto const& listener : iterator->second)
 		{
-			listener->Invoke(value);
+			listener->Receive(name, value);
 		}
 	}
 }
@@ -79,7 +74,7 @@ void EventManager::Invoke(string name, int value)
 	{
 		for (auto const& listener : iterator->second)
 		{
-			listener->Invoke(value);
+			listener->Receive(name, value);
 		}
 	}
 }
@@ -91,19 +86,19 @@ void EventManager::Invoke(string name, float value)
 	{
 		for (auto const& listener : iterator->second)
 		{
-			listener->Invoke(value);
+			listener->Receive(name, value);
 		}
 	}
 }
 
-void EventManager::Invoke(string name, vec2 value)
+void EventManager::Invoke(string name, Vector2 value)
 {
 	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
 		{
-			listener->Invoke(value);
+			listener->Receive(name, value);
 		}
 	}
 }

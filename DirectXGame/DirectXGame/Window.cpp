@@ -10,11 +10,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {
+    // MOUSE
     case WM_LBUTTONDOWN:
     {   
-        RECT rect;
-        GetClientRect(hwnd, &rect);
-        //std::cout << rect.right << "," << rect.bottom << std::endl;
         Mouse::SetDown(MouseInputType::L, true);
         break;
     }
@@ -25,12 +23,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     }
     case WM_MOUSEMOVE: {
         if (Mouse::GetIsDown(MouseInputType::L))
-        {
+        {                   //x               y
             POINT new_pos = { LOWORD(lparam), HIWORD(lparam) };
             Mouse::OnDrag(new_pos);
+            window->OnMouseDrag(Mouse::GetDeltaPos());
         }
         break;
     }
+    // Keyboard
+    case WM_CHAR: {
+        char key = char(wparam);
+        if (key != NULL)
+            window->OnKeyDown(key);
+        break;
+    }
+
     case WM_CREATE:
     {
         // Create Event
@@ -152,7 +159,14 @@ void Window::OnDestroy()
     m_is_run = false;
 }
 
+void Window::OnMouseDrag(const Vector2 delta_pos)
+{
+}
+
+void Window::OnKeyDown(const char key)
+{
+}
+
 Window::~Window()
 {
-    
 }

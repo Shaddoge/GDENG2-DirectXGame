@@ -1,8 +1,8 @@
 #pragma once
-#include "Window.h"
-#include "EventManager.h"
 #include <iostream>
-
+#include "EventManager.h"
+#include "Window.h"
+#include "Vector2.h"
 
 using namespace std;
 
@@ -14,7 +14,6 @@ enum MouseInputType
 
 class Window;
 
-
 class Mouse
 {
 public:
@@ -22,6 +21,7 @@ public:
 // Get
 public:
 	static POINT GetPos();
+	static Vector2 GetDeltaPos();
 	static bool GetIsDown( MouseInputType type );
 // Set
 public:
@@ -35,15 +35,13 @@ private:
 	Mouse();
 	~Mouse();
 private:
-	bool pos_setup = false;
-	
+	bool l_released = true;
 	bool l_is_down = false;
 	bool r_is_down = false;
 
 	POINT old_pos = {0, 0};
 	POINT curr_pos = {0, 0};
-	POINT delta_pos = {0, 0};
+	Vector2 delta_pos = {0, 0};
 
 	friend class Window;
 };
-

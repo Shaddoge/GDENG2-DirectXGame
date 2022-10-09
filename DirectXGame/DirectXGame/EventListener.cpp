@@ -8,23 +8,22 @@ EventListener::~EventListener()
 {
 }
 
-void EventListener::Invoke()
-{
-	std::cout << "Invoke!" << std::endl;
-}
-
-void EventListener::Invoke(bool value)
+void EventListener::Receive(string event_name)
 {
 }
 
-void EventListener::Invoke(int value)
+void EventListener::Receive(string event_name, bool value)
 {
 }
 
-void EventListener::Invoke(float value)
+void EventListener::Receive(string event_name, int value)
 {
 }
 
-void EventListener::Invoke(vec2 value)
+void EventListener::Receive(string event_name, float value)
+{
+}
+
+void EventListener::Receive(string event_name, Vector2 value)
 {
 }

@@ -13,6 +13,11 @@ POINT Mouse::GetPos()
 	return sharedInstance->curr_pos;
 }
 
+Vector2 Mouse::GetDeltaPos()
+{
+	return sharedInstance->delta_pos;
+}
+
 bool Mouse::GetIsDown(MouseInputType type)
 {
 	switch (type)
@@ -27,38 +32,44 @@ bool Mouse::GetIsDown(MouseInputType type)
 
 void Mouse::SetDown(MouseInputType type, bool is_down)
 {
-
 	switch (type)
 	{
-		case L: std::cout << "Set L" << std::endl;
-				sharedInstance->l_is_down = is_down; break;
-		case R: std::cout << "Set R" << std::endl; 
-				sharedInstance->r_is_down = is_down; break;
+		case L: {
+			EventManager::Invoke("MouseLDown", is_down);
+			sharedInstance->l_is_down = is_down; 
+			if (!is_down)
+			{
+				sharedInstance->l_released = true;
+			}
+			break;
+		}
+		case R: {
+			EventManager::Invoke("MouseRDown", is_down);
+			sharedInstance->r_is_down = is_down; break;
+		}
 		default: break;
 	}
 }
 
 void Mouse::OnDrag(POINT new_pos)
 {
-	if (!sharedInstance->pos_setup)
+	if (sharedInstance->l_released)
 	{
 		sharedInstance->old_pos = { new_pos.x, new_pos.y };
-		sharedInstance->pos_setup = true;
+		sharedInstance->l_released = false;
 		return;
 	}
 	sharedInstance->curr_pos = new_pos;
 	int old_pos_x = sharedInstance->old_pos.x;
 	int old_pos_y = sharedInstance->old_pos.y;
-	sharedInstance->delta_pos = { -(old_pos_x - new_pos.x), old_pos_y - new_pos.y };
+	sharedInstance->delta_pos = Vector2(-(old_pos_x - new_pos.x), old_pos_y - new_pos.y );
 	sharedInstance->old_pos = { new_pos.x, new_pos.y };
-	
-	vec2 vec2_pos = { sharedInstance->delta_pos.x, sharedInstance->delta_pos.y };
-	EventManager::Invoke("Mouse", vec2_pos);
+	EventManager::Invoke("MouseMove", sharedInstance->delta_pos);
 }
 
 Mouse::Mouse()
 {
-}
+}	
 
 Mouse::~Mouse()
 {

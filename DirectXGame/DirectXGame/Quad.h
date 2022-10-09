@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "ConstantBuffer.h"
 #include "VertexBuffer.h"
 #include "GraphicsEngine.h"
@@ -8,49 +9,48 @@
 #include "EngineTime.h"
 #include "Structs.h"
 #include "EventManager.h"
-#include <iostream>
+#include "Matrix.h"
+#include "Vector3.h"
+#include "Vector2.h"
+#include "Window.h"
 
 struct quad_vertex
 {
-	vec3 position;
-	vec3 position1;
-	vec3 color;
-	vec3 color1;
-};
-
-__declspec(align(16))
-struct constant
-{
-	float m_angle;
+	Vector3 position;
+	Vector3 position1;
+	Vector3 color;
+	Vector3 color1;
 };
 
 class Quad : public EventListener
 {
 public:
 	Quad();
-	Quad(vec2 dimension, vec3 off_pos[2]);
+	Quad(Vector2 position);
+	Quad(Vector2 dimension, Vector3 off_pos[2]);
 	Quad(quad_vertex vertex_list[4]);
-	void Update();
+	void Update(RECT rc);
 	void SetFixedTime(bool fixed);
 	~Quad();
 
-	virtual void Invoke(vec2 pos) override;
+	virtual void Receive(string event_name, bool value);
+	virtual void Receive(string event_name, Vector2 pos) override;
 public:
 	VertexBuffer GetVertexBuffer();
-	void OnDrag(POINT mouse_pos);
+	void Translate(Vector2 delta_pos);
+	void Scale(Vector2 delta_pos);
 private:
 	VertexBuffer* m_vb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
 private:
-	//unsigned long m_old_time = 0.0f;
 	float m_delta_time = 0.0f;
 	float m_angle = 0.0f;
 	float m_time_multiplier = 1.0f;
 	float m_time_tracker = 0.0f;
-	bool m_add_multiplier = true;
 	bool m_fixed_time = true;
-	vec2 m_offset = { 0, 0 };
+	const float transform_speed = 0.15f;
+	Vector2 m_position = Vector2();
+	Vector2 m_scale = Vector2(1.0f, 1.0f);
 };
-

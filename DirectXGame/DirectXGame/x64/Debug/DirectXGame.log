@@ -1,10 +1,1 @@
-﻿  Quad.cpp
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(23,88): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(62,88): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(89,87): warning C4267: 'argument': conversion from 'size_t' to 'UINT', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(106,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(174,25): warning C4838: conversion from 'float' to 'LONG' requires a narrowing conversion
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(174,25): warning C4244: 'initializing': conversion from 'float' to 'LONG', possible loss of data
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(174,32): warning C4838: conversion from 'float' to 'LONG' requires a narrowing conversion
-C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\Quad.cpp(174,32): warning C4244: 'initializing': conversion from 'float' to 'LONG', possible loss of data
-  DirectXGame.vcxproj -> C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\x64\Debug\DirectXGame.exe
+﻿  DirectXGame.vcxproj -> C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\x64\Debug\DirectXGame.exe

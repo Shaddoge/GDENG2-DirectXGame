@@ -11,6 +11,14 @@
 #include "EngineTime.h"
 #include "Mouse.h"
 #include "EventManager.h"
+#include <vector>
+
+enum TransformMode
+{
+	TRANSLATE,
+	SCALE,
+	ROTATE
+};
 
 class AppWindow : public Window
 {
@@ -22,10 +30,12 @@ public:
 	virtual void OnCreate() override;
 	virtual void OnUpdate() override;
 	virtual void OnDestroy() override;
+	virtual void OnMouseDrag(const Vector2 delta_pos);
+	virtual void OnKeyDown(const char key) override;
 private:
 	SwapChain* m_swap_chain;
 private:
-	Quad* quad;
-	//Quad* quads[3];
+	TransformMode transform_mode = TransformMode::TRANSLATE;
+	vector<Quad*> quads;
+	int selected_quad = 0;
 };
-

@@ -1,11 +1,17 @@
 #pragma once
+#include "Matrix.h"
 
-struct vec2
+/*
+struct mat4
 {
-	float x, y;
-};
+	float mat[4][4];
+};*/
 
-struct vec3
+__declspec(align(16))
+struct constant
 {
-	float x, y, z;
+	Matrix m_world;
+	Matrix m_view;
+	Matrix m_projection;
+	float m_angle;
 };

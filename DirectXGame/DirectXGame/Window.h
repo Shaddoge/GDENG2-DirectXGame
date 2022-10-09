@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "EngineTime.h"
 #include "Mouse.h"
+#include "Vector2.h"
 
 class Window
 {
@@ -21,6 +22,8 @@ public:
 	virtual void OnCreate();
 	virtual void OnUpdate();
 	virtual void OnDestroy();
+	virtual void OnMouseDrag(const Vector2 delta_pos);
+	virtual void OnKeyDown(const char key);
 	~Window();
 protected:
 	HWND m_hwnd;
