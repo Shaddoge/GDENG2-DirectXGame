@@ -22,7 +22,8 @@ public:
 	virtual void OnCreate();
 	virtual void OnUpdate();
 	virtual void OnDestroy();
-	virtual void OnMouseDrag(const Vector2 delta_pos);
+	virtual void OnResize(int width, int height);
+	virtual void OnMouseDrag(Vector2 delta_pos);
 	virtual void OnKeyDown(const char key);
 	~Window();
 protected:

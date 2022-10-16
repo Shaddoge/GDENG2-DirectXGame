@@ -43,6 +43,12 @@
     <Filter Include="GameEngine\EventSystem">
       <UniqueIdentifier>{d0201b79-1262-4fc4-a464-8ef8dcb3d3a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\IndexBuffer">
+      <UniqueIdentifier>{a118e535-3cc6-4f69-803b-10c08c3c0e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Math">
+      <UniqueIdentifier>{5cd9cfc5-364b-483b-ae52-f291cd403cb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,16 +93,25 @@
     <ClCompile Include="EventListener.cpp">
       <Filter>GameEngine\EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix.cpp">
-      <Filter>App</Filter>
+    <ClCompile Include="Quad.cpp">
+      <Filter>GameEngine\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>App</Filter>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GameEngine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
-      <Filter>App</Filter>
+      <Filter>GameEngine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Quad.cpp">
+    <ClCompile Include="Vector3.cpp">
+      <Filter>GameEngine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>GameEngine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
       <Filter>GameEngine\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,14 +161,23 @@
     <ClInclude Include="EventListener.h">
       <Filter>GameEngine\EventSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>App</Filter>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>App</Filter>
+    <ClInclude Include="Cube.h">
+      <Filter>GameEngine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Vector3.h">
-      <Filter>App</Filter>
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameEngine\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

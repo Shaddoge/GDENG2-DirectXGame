@@ -130,11 +130,14 @@
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DeviceContext.cpp" />
     <ClCompile Include="EngineTime.cpp" />
     <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -152,10 +155,13 @@
   <ItemGroup>
     <ClInclude Include="AppWindow.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DeviceContext.h" />
     <ClInclude Include="EngineTime.h" />
     <ClInclude Include="EventListener.h" />
     <ClInclude Include="EventManager.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Matrix.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>

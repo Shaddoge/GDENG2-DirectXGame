@@ -1,39 +1,28 @@
 #pragma once
 #include <iostream>
-#include "ConstantBuffer.h"
-#include "VertexBuffer.h"
-#include "GraphicsEngine.h"
-#include "DeviceContext.h"
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "EngineTime.h"
-#include "Structs.h"
+#include "GameObject.h"
 #include "EventManager.h"
-#include "Matrix.h"
-#include "Vector3.h"
-#include "Vector2.h"
 #include "Window.h"
 
 struct quad_vertex
 {
 	Vector3 position;
-	Vector3 position1;
 	Vector3 color;
 	Vector3 color1;
 };
 
-class Quad : public EventListener
+class Quad : public EventListener, GameObject
 {
 public:
-	Quad();
-	Quad(Vector2 position);
-	Quad(Vector2 dimension, Vector3 off_pos[2]);
-	Quad(quad_vertex vertex_list[4]);
+	Quad(string name);
+	Quad(string name, Vector2 position);
+	Quad(string name, Vector2 dimension, Vector3 off_pos[2]);
+	Quad(string name, quad_vertex vertex_list[4]);
 	void Update(RECT rc);
 	void SetFixedTime(bool fixed);
 	~Quad();
 
-	virtual void Receive(string event_name, bool value);
+	virtual void Receive(string event_name, bool value) override;
 	virtual void Receive(string event_name, Vector2 pos) override;
 public:
 	VertexBuffer GetVertexBuffer();

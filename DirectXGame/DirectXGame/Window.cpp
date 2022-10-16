@@ -10,6 +10,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     switch (msg)
     {
+    case WM_SIZE:
+    {
+        window->OnResize(LOWORD(lparam), HIWORD(lparam));
+        break;
+    }
     // MOUSE
     case WM_LBUTTONDOWN:
     {   
@@ -159,7 +164,11 @@ void Window::OnDestroy()
     m_is_run = false;
 }
 
-void Window::OnMouseDrag(const Vector2 delta_pos)
+void Window::OnResize(int width, int height)
+{
+}
+
+void Window::OnMouseDrag(Vector2 delta_pos)
 {
 }
 

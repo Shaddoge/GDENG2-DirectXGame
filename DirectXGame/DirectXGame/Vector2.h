@@ -7,6 +7,7 @@ public:
 	~Vector2();
 public:
 	void operator += (const Vector2& vector);
+	void operator *= (const float& value);
 public:
 	float x;
 	float y;

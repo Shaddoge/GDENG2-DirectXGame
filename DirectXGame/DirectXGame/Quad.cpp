@@ -1,14 +1,14 @@
 #include "Quad.h"
 
-Quad::Quad()
+Quad::Quad(string name) : GameObject(name)
 {
 	//EventManager::BindEvent("MouseMove", this);
 	quad_vertex vertex_list[4] = {
-		// X - Y - Z										Color
-		{Vector3(-0.25f,-0.25f, 0.0f),		Vector3(-0.25f,-0.25f, 0.0f),		Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-0.25f, 0.25f, 0.0f),		Vector3(-0.25f, 0.25f, 0.0f),		Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(0.25f,-0.25f, 0.0f),		Vector3(0.25f, -0.25f, 0.0f),		Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(0.25f, 0.25f, 0.0f),		Vector3(0.25f,  0.25f, 0.0f),		Vector3(0,0,0),	Vector3(1,1,1)}
+		// X - Y - Z					Color
+		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
+		{Vector3(-0.25f, 0.25f, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
+		{Vector3(0.25f,-0.25f, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
+		{Vector3(0.25f, 0.25f, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -35,15 +35,15 @@ Quad::Quad()
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(Vector2 position)
+Quad::Quad(string name, Vector2 position) : GameObject(name)
 {
 	m_position = position;
 	quad_vertex vertex_list[4] = {
-		// X - Y - Z										Color
-		{Vector3(-0.25f,-0.25f, 0.0f),		Vector3(-0.25f,-0.25f, 0.0f),		Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-0.25f, 0.25f, 0.0f),		Vector3(-0.25f, 0.25f, 0.0f),		Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(0.25f,-0.25f, 0.0f),		Vector3(0.25f, -0.25f, 0.0f),		Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(0.25f, 0.25f, 0.0f),		Vector3(0.25f,  0.25f, 0.0f),		Vector3(0,0,0),	Vector3(1,1,1)}
+		// X - Y - Z					Color
+		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
+		{Vector3(-0.25f, 0.25f, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
+		{Vector3(0.25f,-0.25f, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
+		{Vector3(0.25f, 0.25f, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -71,18 +71,18 @@ Quad::Quad(Vector2 position)
 }
 
 // With offset positioning
-Quad::Quad(Vector2 dimension, Vector3 off_pos[2])
+Quad::Quad(string name, Vector2 dimension, Vector3 off_pos[2]) : GameObject(name)
 {
 	//EventManager::BindEvent("MouseMove", this);
 	float x_half = dimension.x / 2;
 	float y_half = dimension.y / 2;
 	quad_vertex vertex_list[4] = {
 		
-		// X - Y - Z																											Color
-		{Vector3(-x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),		Vector3(-x_half + off_pos[1].x,-y_half + off_pos[1].y, 0.0f),		Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),		Vector3(-x_half + off_pos[1].x, y_half + off_pos[1].y, 0.0f),		Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),		Vector3(x_half + off_pos[1].x,-y_half + off_pos[1].y, 0.0f),		Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),		Vector3(x_half + off_pos[1].x, y_half + off_pos[1].y, 0.0f),		Vector3(0,0,0),	Vector3(1,1,1)}
+		// X - Y - Z													Color
+		{Vector3(-x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
+		{Vector3(-x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
+		{Vector3(x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
+		{Vector3(x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
 	};
 	
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -109,7 +109,7 @@ Quad::Quad(Vector2 dimension, Vector3 off_pos[2])
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(quad_vertex vertex_list[4])
+Quad::Quad(string name, quad_vertex vertex_list[4]) : GameObject(name)
 {
 	//EventManager::BindEvent("MouseMove", this);
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();

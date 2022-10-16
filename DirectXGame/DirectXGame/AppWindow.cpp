@@ -23,22 +23,24 @@ void AppWindow::OnCreate()
 	
 	RECT rc = this->GetClientWindowRect();
 	m_swap_chain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
-	
-	quad_vertex quad_vertices[4] = {
-		{Vector3(-0.75,-0.8, 0.0),	Vector3(-0.3, 0.0, 0.0),	Vector3(0.1, 0.0, 0.0),  Vector3(0,1,0)},
-		{Vector3(-0.9,  0.2, 0.0),	Vector3(-0.1, 0.8, 0.0),	Vector3(1.0, 0.9, 0.0),  Vector3(1,1,0)},
-		{Vector3(0.1, -0.25, 0.0),	Vector3(0.8, -0.6, 0.0),	Vector3(0.0, 0.0, 1.0),  Vector3(1,0,0)},
-		{Vector3(0.05, 0.21, 0.0),	Vector3(0.9,  0.8, 0.0),	Vector3(1.0, 1.0, 1.0),  Vector3(0,0,1)}
-	};
 
 	// Quads
-	Quad* quad_ptr;
+	/*Quad* quad_ptr;
 	for (int i = 0; i < 3; i++)
 	{
 		Vector2 vec = Vector2(-0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Offset
 		quad_ptr = new Quad(vec);
 		quads.push_back(quad_ptr);
 		//EventManager::BindListener("MouseLDown", quad_ptr);
+	}*/
+
+	// Cubes
+	Cube* cube_ptr;
+	for (int i = 0; i < 1; i++)
+	{
+		//Vector3 vec = Vector3(-0.6 + (i * 0.6), -0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Offset
+		cube_ptr = new Cube("Cube " + to_string(i));
+		cubes.push_back(cube_ptr);
 	}
 }
 void AppWindow::OnUpdate()
@@ -50,10 +52,19 @@ void AppWindow::OnUpdate()
 	RECT rc = this->GetClientWindowRect();
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 	
+	delta_time = EngineTime::GetDeltaTime();
+
 	// Quads
-	for (Quad* quad_ptr : quads)
+	/*for (Quad* quad_ptr : quads)
 	{
 		quad_ptr->Update(rc);
+	}*/
+
+	// Cubes
+	for (Cube* cube_ptr : cubes)
+	{
+		cube_ptr->Update(delta_time);
+		cube_ptr->Draw(width, height);
 	}
 
 	m_swap_chain->Present(true);
@@ -68,17 +79,31 @@ void AppWindow::OnDestroy()
 	}
 	quads.clear();
 
+	for (Cube* cube_ptr : cubes)
+	{
+		delete cube_ptr;
+	}
+	cubes.clear();
+
 	m_swap_chain->Release();
 	
 	GraphicsEngine::Get()->Release();
 }
 
-void AppWindow::OnMouseDrag(const Vector2 delta_pos)
+void AppWindow::OnResize(int width, int height)
 {
+	this->width = width;
+	this->height = height;
+}
+
+void AppWindow::OnMouseDrag(Vector2 delta_pos)
+{
+	delta_pos *= delta_time;
 	switch (transform_mode)
 	{
-		case TRANSLATE: quads[selected_quad]->Translate(delta_pos); break;
-		case SCALE: quads[selected_quad]->Scale(delta_pos); break;
+		case TRANSLATE: cubes[selected_quad]->SetPositionMouse(delta_pos); break;
+		case SCALE: cubes[selected_quad]->SetScaleMouse(delta_pos); break;
+		case ROTATE: cubes[selected_quad]->SetRotationMouse(delta_pos); break;
 		default: break;
 	}
 }
@@ -96,6 +121,7 @@ void AppWindow::OnKeyDown(const char key)
 		{
 		case 'q': transform_mode = TRANSLATE; return; break;
 		case 'w': transform_mode = SCALE; return; break;
+		case 'e': transform_mode = ROTATE; return; break;
 		default: break;
 		}
 	}

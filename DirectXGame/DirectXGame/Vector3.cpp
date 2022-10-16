@@ -20,9 +20,21 @@ Vector3::~Vector3()
 
 void Vector3::operator+=(const Vector3& vector)
 {
-	Vector3 out;
-
 	x += vector.x;
 	y += vector.y;
 	z += vector.z;
+}
+
+void Vector3::operator*=(const Vector3& vector)
+{
+	x *= vector.x;
+	y *= vector.y;
+	z *= vector.z;
+}
+
+void Vector3::operator*=(const float value)
+{
+	x *= value;
+	y *= value;
+	z *= value;
 }
