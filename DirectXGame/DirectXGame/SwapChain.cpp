@@ -38,11 +38,71 @@ bool SwapChain::Init(HWND hwnd, UINT width, UINT height)
 	{
 		return false;
 	}
-
+	
 	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	HRESULT bufferResult = this->m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
+
+	HRESULT renderResult = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
+	buffer->Release();
+	
+	D3D11_TEXTURE2D_DESC dsTexDesc = {};
+	dsTexDesc.Width = width;
+	dsTexDesc.Height = height;
+	dsTexDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dsTexDesc.Usage = D3D11_USAGE_DEFAULT;
+	dsTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	dsTexDesc.MipLevels = 1;
+	dsTexDesc.SampleDesc.Count = 1;
+	dsTexDesc.SampleDesc.Quality = 0;
+	dsTexDesc.ArraySize = 1;
+	dsTexDesc.CPUAccessFlags = 0;
+	dsTexDesc.MiscFlags = 0;
+
+	HRESULT depthResult = device->CreateTexture2D(&dsTexDesc, NULL, &buffer);
+	if (FAILED(depthResult))
+	{
+		return false;
+	}
+
+	// Create DSV
+	HRESULT depthStencilViewResult = device->CreateDepthStencilView(buffer, NULL, &m_dsv);
+	if (FAILED(depthStencilViewResult))
+	{
+		return false;
+	}
 	buffer->Release();
 
-	if (FAILED(hr))
+	// DSS
+	CD3D11_DEPTH_STENCIL_DESC dssDesc;
+	
+	dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dssDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	dssDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	dssDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+	dssDesc.DepthEnable = false;
+	dssDesc.StencilEnable = true;
+
+	dssDesc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
+	dssDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	dssDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	dssDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
+
+	dssDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
+	
+	// Create DSS
+	HRESULT depthStencilStateResult = device->CreateDepthStencilState(&dssDesc, &m_dss);
+	buffer->Release();
+
+	if (FAILED(depthStencilStateResult))
 	{
 		return false;
 	}

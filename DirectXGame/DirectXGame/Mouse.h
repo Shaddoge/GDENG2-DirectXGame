@@ -37,6 +37,7 @@ private:
 private:
 	bool l_released = true;
 	bool l_is_down = false;
+	bool r_released = true;
 	bool r_is_down = false;
 
 	POINT old_pos = {0, 0};

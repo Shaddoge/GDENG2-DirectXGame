@@ -6,10 +6,11 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
-#include "Quad.h"
-#include "Cube.h"
 #include "EngineTime.h"
 #include "Mouse.h"
+#include "Quad.h"
+#include "Cube.h"
+#include "Plane.h"
 #include "EventManager.h"
 #include <vector>
 
@@ -31,7 +32,8 @@ public:
 	virtual void OnUpdate() override;
 	virtual void OnDestroy() override;
 	virtual void OnResize(int width, int height) override;
-	virtual void OnMouseDrag(Vector2 delta_pos) override;
+	virtual void OnLMouseDrag(Vector2 delta_pos) override;
+	virtual void OnRMouseDrag(Vector2 delta_pos) override;
 	virtual void OnKeyDown(const char key) override;
 private:
 	SwapChain* m_swap_chain;
@@ -42,6 +44,7 @@ private:
 	TransformMode transform_mode = TransformMode::TRANSLATE;
 	vector<Quad*> quads;
 	vector<Cube*> cubes;
+	Plane* plane;
 	float delta_time = 0.0f;
-	int selected_quad = 0;
+	int selected_obj = 0;
 };

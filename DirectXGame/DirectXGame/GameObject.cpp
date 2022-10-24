@@ -36,6 +36,12 @@ void GameObject::SetPositionMouse(Vector2 delta_pos)
 	this->local_position = Vector3(local_position.x + delta_pos.x, local_position.y + delta_pos.y, local_position.z);
 }
 
+void GameObject::SetPositionZMouse(Vector2 delta_pos)
+{
+	delta_pos *= transform_speed;
+	this->local_position = Vector3(local_position.x, local_position.y, local_position.z + delta_pos.x);
+}
+
 Vector3 GameObject::GetLocalPosition()
 {
 	return this->local_position;
@@ -55,6 +61,12 @@ void GameObject::SetScaleMouse(Vector2 delta_pos)
 {
 	delta_pos *= transform_speed;
 	this->local_scale = Vector3(local_scale.x + delta_pos.x, local_scale.y + delta_pos.y, local_scale.z);
+}
+
+void GameObject::SetScaleZMouse(Vector2 delta_pos)
+{
+	delta_pos *= transform_speed;
+	this->local_scale = Vector3(local_scale.x, local_scale.y, local_scale.z + delta_pos.x);
 }
 
 Vector3 GameObject::GetLocalScale()
@@ -78,13 +90,13 @@ void GameObject::SetRotationMouse(Vector2 delta_pos)
 	this->local_rotation = Vector3(local_rotation.x + delta_pos.y, local_rotation.y - delta_pos.x, local_rotation.z);
 }
 
+void GameObject::SetRotationZMouse(Vector2 delta_pos)
+{
+	delta_pos *= transform_speed;
+	this->local_rotation = Vector3(local_rotation.x, local_rotation.y, local_rotation.z - delta_pos.x);
+}
 
 Vector3 GameObject::GetLocalRotation()
 {
 	return this->local_rotation;
-}
-
-VertexBuffer GameObject::GetVertexBuffer()
-{
-	return *m_vb;
 }

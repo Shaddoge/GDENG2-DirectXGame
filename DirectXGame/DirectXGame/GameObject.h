@@ -29,30 +29,29 @@ public:
 	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 pos);
 	void SetPositionMouse(Vector2 delta_pos);
+	void SetPositionZMouse(Vector2 delta_pos);
 	Vector3 GetLocalPosition();
 
 	void SetScale(float x, float y, float z);
 	void SetScale(Vector3 scale);
 	void SetScaleMouse(Vector2 delta_pos);
+	void SetScaleZMouse(Vector2 delta_pos);
 	Vector3 GetLocalScale();
 
 	void SetRotation(float x, float y, float z);
 	void SetRotation(Vector3 rot);
 	void SetRotationMouse(Vector2 delta_pos);
+	void SetRotationZMouse(Vector2 delta_pos);
 	Vector3 GetLocalRotation();
-public:
-	VertexBuffer GetVertexBuffer();
-private:
-	VertexBuffer* m_vb;
-	IndexBuffer* m_ib;
-	VertexShader* m_vs;
-	PixelShader* m_ps;
-	ConstantBuffer* m_cb;
+
+	bool GetOutlined() { return is_outlined; };
+	void SetOutlined(bool flag) { is_outlined = flag; };
 private:
 	string name;
 	const float transform_speed = 0.15f;
 	Vector3 local_position;
 	Vector3 local_scale;
 	Vector3 local_rotation;
+	bool is_outlined = false;
 };
 

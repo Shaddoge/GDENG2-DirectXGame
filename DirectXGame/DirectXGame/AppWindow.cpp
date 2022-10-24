@@ -36,13 +36,18 @@ void AppWindow::OnCreate()
 
 	// Cubes
 	Cube* cube_ptr;
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		//Vector3 vec = Vector3(-0.6 + (i * 0.6), -0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Offset
 		cube_ptr = new Cube("Cube " + to_string(i));
+		Vector3 rand_position = Vector3(((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f);
+		cube_ptr->SetSpeed(((rand() % 200) - 100) / 50.0f);
+		cube_ptr->SetPosition(rand_position);
 		cubes.push_back(cube_ptr);
 	}
+
+	//plane = new Plane("Plane");
 }
+
 void AppWindow::OnUpdate()
 {
 	Window::OnUpdate();
@@ -67,6 +72,10 @@ void AppWindow::OnUpdate()
 		cube_ptr->Draw(width, height);
 	}
 
+	// Plane
+	//plane->Update(delta_time);
+	//plane->Draw(width, height);
+
 	m_swap_chain->Present(true);
 }
 
@@ -85,6 +94,8 @@ void AppWindow::OnDestroy()
 	}
 	cubes.clear();
 
+	//delete plane;
+
 	m_swap_chain->Release();
 	
 	GraphicsEngine::Get()->Release();
@@ -96,16 +107,41 @@ void AppWindow::OnResize(int width, int height)
 	this->height = height;
 }
 
-void AppWindow::OnMouseDrag(Vector2 delta_pos)
+void AppWindow::OnLMouseDrag(Vector2 delta_pos)
 {
 	delta_pos *= delta_time;
-	switch (transform_mode)
+	if (selected_obj >= 0 and selected_obj <= 2)
 	{
-		case TRANSLATE: cubes[selected_quad]->SetPositionMouse(delta_pos); break;
-		case SCALE: cubes[selected_quad]->SetScaleMouse(delta_pos); break;
-		case ROTATE: cubes[selected_quad]->SetRotationMouse(delta_pos); break;
+		switch (transform_mode)
+		{
+		case TRANSLATE: cubes[selected_obj]->SetPositionMouse(delta_pos); break;
+		case SCALE: cubes[selected_obj]->SetScaleMouse(delta_pos); break;
+		case ROTATE: cubes[selected_obj]->SetRotationMouse(delta_pos); break;
 		default: break;
+		}
 	}
+}
+
+void AppWindow::OnRMouseDrag(Vector2 delta_pos)
+{
+	delta_pos *= delta_time;
+	if (selected_obj >= 0 and selected_obj <= 2)
+	{
+		switch (transform_mode)
+		{
+			case TRANSLATE: cubes[selected_obj]->SetPositionZMouse(delta_pos); break;
+			case SCALE: cubes[selected_obj]->SetScaleZMouse(delta_pos); break;
+			case ROTATE: cubes[selected_obj]->SetRotationZMouse(delta_pos); break;
+			default: break;
+		}
+	}
+	/*switch (transform_mode)
+	{
+	case TRANSLATE: plane->SetPositionZMouse(delta_pos); break;
+	case SCALE: plane->SetScaleZMouse(delta_pos); break;
+	case ROTATE: plane->SetRotationZMouse(delta_pos); break;
+	default: break;
+	}*/
 }
 
 void AppWindow::OnKeyDown(const char key)
@@ -113,7 +149,13 @@ void AppWindow::OnKeyDown(const char key)
 	int num = key - '0';
 	if (num >= 1 && num <= 3)
 	{
-		selected_quad = num - 1;
+		selected_obj = num - 1;
+		
+		for (Cube* cube : cubes)
+		{
+			cube->SetOutlined(false);
+		}
+		cubes[selected_obj]->SetOutlined(true);
 	}
 	else
 	{

@@ -26,12 +26,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         Mouse::SetDown(MouseInputType::L, false);
         break;
     }
+    case WM_RBUTTONDOWN:
+    {
+        Mouse::SetDown(MouseInputType::R, true);
+        break;
+    }
+    case WM_RBUTTONUP:
+    {
+        Mouse::SetDown(MouseInputType::R, false);
+        break;
+    }
     case WM_MOUSEMOVE: {
+        //                x               y
+        POINT new_pos = { LOWORD(lparam), HIWORD(lparam) };
+        Mouse::OnDrag(new_pos);
         if (Mouse::GetIsDown(MouseInputType::L))
-        {                   //x               y
-            POINT new_pos = { LOWORD(lparam), HIWORD(lparam) };
-            Mouse::OnDrag(new_pos);
-            window->OnMouseDrag(Mouse::GetDeltaPos());
+        {                   
+            window->OnLMouseDrag(Mouse::GetDeltaPos());
+        }
+        else if (Mouse::GetIsDown(MouseInputType::R))
+        {
+            window->OnRMouseDrag(Mouse::GetDeltaPos());
         }
         break;
     }
@@ -168,7 +183,11 @@ void Window::OnResize(int width, int height)
 {
 }
 
-void Window::OnMouseDrag(Vector2 delta_pos)
+void Window::OnLMouseDrag(Vector2 delta_pos)
+{
+}
+
+void  Window::OnRMouseDrag(Vector2 delta_pos)
 {
 }
 

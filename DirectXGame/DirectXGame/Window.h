@@ -23,7 +23,8 @@ public:
 	virtual void OnUpdate();
 	virtual void OnDestroy();
 	virtual void OnResize(int width, int height);
-	virtual void OnMouseDrag(Vector2 delta_pos);
+	virtual void OnLMouseDrag(Vector2 delta_pos);
+	virtual void OnRMouseDrag(Vector2 delta_pos);
 	virtual void OnKeyDown(const char key);
 	~Window();
 protected:

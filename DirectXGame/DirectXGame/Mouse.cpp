@@ -46,6 +46,10 @@ void Mouse::SetDown(MouseInputType type, bool is_down)
 		case R: {
 			EventManager::Invoke("MouseRDown", is_down);
 			sharedInstance->r_is_down = is_down; break;
+			if (!is_down)
+			{
+				sharedInstance->r_released = true;
+			}
 		}
 		default: break;
 	}

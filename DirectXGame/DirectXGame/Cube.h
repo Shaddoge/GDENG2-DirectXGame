@@ -18,11 +18,11 @@ public:
 	void Update(float delta_time) override;
 	void Draw(int width, int height) override;
 	~Cube();
-
-	virtual void Receive(string event_name, bool value) override;
 public:
 	VertexBuffer GetVertexBuffer();
+	void SetSpeed(float speed);
 private:
+	VertexBuffer* m_vb_outline;
 	VertexBuffer* m_vb;
 	IndexBuffer* m_ib;
 	VertexShader* m_vs;
@@ -30,8 +30,6 @@ private:
 	ConstantBuffer* m_cb;
 private:
 	float m_angle = 0.0f;
-	float m_time_multiplier = 1.0f;
-	float m_time_tracker = 0.0f;
-	const float transform_speed = 0.15f;
+	float m_speed = 0.0f;
 	float m_delta_scale = 0.0f;
 };
