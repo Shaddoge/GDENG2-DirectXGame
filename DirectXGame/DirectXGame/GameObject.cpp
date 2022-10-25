@@ -3,8 +3,8 @@
 GameObject::GameObject(string name)
 {
 	this->name = name;
-	this->local_position = Vector3();
-	this->local_scale = Vector3(1.0f, 1.0f, 1.0f);
+	this->world_position = Vector3();
+	this->scale = Vector3(1.0f, 1.0f, 1.0f);
 	this->local_rotation = Vector3();
 }
 
@@ -22,56 +22,56 @@ void GameObject::Draw(int width, int height)
 
 void GameObject::SetPosition(float x, float y, float z)
 {
-	this->local_position = Vector3(x, y, z);
+	this->world_position = Vector3(x, y, z);
 }
 
 void GameObject::SetPosition(Vector3 pos)
 {
-	this->local_position = pos;
+	this->world_position = pos;
 }
 
 void GameObject::SetPositionMouse(Vector2 delta_pos)
 {
 	delta_pos *= transform_speed;
-	this->local_position = Vector3(local_position.x + delta_pos.x, local_position.y + delta_pos.y, local_position.z);
+	this->world_position = Vector3(world_position.x + delta_pos.x, world_position.y + delta_pos.y, world_position.z);
 }
 
 void GameObject::SetPositionZMouse(Vector2 delta_pos)
 {
 	delta_pos *= transform_speed;
-	this->local_position = Vector3(local_position.x, local_position.y, local_position.z + delta_pos.x);
+	this->world_position = Vector3(world_position.x, world_position.y, world_position.z + delta_pos.x);
 }
 
-Vector3 GameObject::GetLocalPosition()
+Vector3 GameObject::GetWorldPosition()
 {
-	return this->local_position;
+	return this->world_position;
 }
 
 void GameObject::SetScale(float x, float y, float z)
 {
-	this->local_scale = Vector3(x, y, z);
+	this->scale = Vector3(x, y, z);
 }
 
 void GameObject::SetScale(Vector3 scale)
 {
-	this->local_scale = scale;
+	this->scale = scale;
 }
 
 void GameObject::SetScaleMouse(Vector2 delta_pos)
 {
 	delta_pos *= transform_speed;
-	this->local_scale = Vector3(local_scale.x + delta_pos.x, local_scale.y + delta_pos.y, local_scale.z);
+	this->scale = Vector3(scale.x + delta_pos.x, scale.y + delta_pos.y, scale.z);
 }
 
 void GameObject::SetScaleZMouse(Vector2 delta_pos)
 {
 	delta_pos *= transform_speed;
-	this->local_scale = Vector3(local_scale.x, local_scale.y, local_scale.z + delta_pos.x);
+	this->scale = Vector3(scale.x, scale.y, scale.z + delta_pos.x);
 }
 
-Vector3 GameObject::GetLocalScale()
+Vector3 GameObject::GetScale()
 {
-	return this->local_scale;
+	return this->scale;
 }
 
 void GameObject::SetRotation(float x, float y, float z)

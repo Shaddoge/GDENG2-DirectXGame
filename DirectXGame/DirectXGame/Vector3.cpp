@@ -38,3 +38,14 @@ void Vector3::operator*=(const float value)
 	y *= value;
 	z *= value;
 }
+
+
+Vector3 Vector3::operator*(const float value)
+{
+	return Vector3(x * value, y * value, z * value);
+}
+
+Vector3 Vector3::operator+(const Vector3& vector)
+{
+	return Vector3(x + vector.x, y + vector.y, z + vector.z);
+}

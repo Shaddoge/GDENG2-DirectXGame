@@ -16,16 +16,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         break;
     }
     // MOUSE
-    case WM_LBUTTONDOWN:
-    {   
-        Mouse::SetDown(MouseInputType::L, true);
-        break;
-    }
-    case WM_LBUTTONUP:
-    {
-        Mouse::SetDown(MouseInputType::L, false);
-        break;
-    }
     case WM_RBUTTONDOWN:
     {
         Mouse::SetDown(MouseInputType::R, true);
@@ -34,6 +24,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     case WM_RBUTTONUP:
     {
         Mouse::SetDown(MouseInputType::R, false);
+        break;
+    }
+    case WM_LBUTTONDOWN:
+    {   
+        Mouse::SetDown(MouseInputType::L, true);
+        break;
+    }
+    case WM_LBUTTONUP:
+    {
+        Mouse::SetDown(MouseInputType::L, false);
         break;
     }
     case WM_MOUSEMOVE: {
@@ -51,13 +51,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         break;
     }
     // Keyboard
-    case WM_CHAR: {
+    case WM_KEYUP: {
         char key = char(wparam);
         if (key != NULL)
-            window->OnKeyDown(key);
+        {
+            window->OnKeyUp(key);
+        }
+        
         break;
     }
+    case WM_KEYDOWN: {
+        char key = char(wparam);
+        if (key != NULL)
+        {
+            window->OnKeyDown(key);
+        }
 
+        break;
+    }
     case WM_CREATE:
     {
         // Create Event
@@ -192,6 +203,10 @@ void  Window::OnRMouseDrag(Vector2 delta_pos)
 }
 
 void Window::OnKeyDown(const char key)
+{
+}
+
+void Window::OnKeyUp(const char key)
 {
 }
 

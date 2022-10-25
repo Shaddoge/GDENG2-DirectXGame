@@ -9,9 +9,9 @@ public:
 	void operator+=(const Vector3& vector);
 	void operator*=(const Vector3& vector);
 	void operator*=(const float value);
+	Vector3 operator*(const float value);
+	Vector3 operator+(const Vector3& vector);
 public:
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 };
 

@@ -12,6 +12,7 @@
 #include "Cube.h"
 #include "Plane.h"
 #include "EventManager.h"
+#include "Camera.h"
 #include <vector>
 
 enum TransformMode
@@ -27,6 +28,8 @@ public:
 	AppWindow();
 	~AppWindow();
 
+	void Update(float delta_time);
+
 	// Inherited via Window
 	virtual void OnCreate() override;
 	virtual void OnUpdate() override;
@@ -35,6 +38,7 @@ public:
 	virtual void OnLMouseDrag(Vector2 delta_pos) override;
 	virtual void OnRMouseDrag(Vector2 delta_pos) override;
 	virtual void OnKeyDown(const char key) override;
+	virtual void OnKeyUp(const char key) override;
 private:
 	SwapChain* m_swap_chain;
 	VertexShader* m_vs;
@@ -42,9 +46,12 @@ private:
 private:
 	int width, height;
 	TransformMode transform_mode = TransformMode::TRANSLATE;
+
+	Camera* scene_camera;
 	vector<Quad*> quads;
 	vector<Cube*> cubes;
 	Plane* plane;
+
 	float delta_time = 0.0f;
 	int selected_obj = 0;
 };

@@ -26,6 +26,7 @@ public:
 	virtual void OnLMouseDrag(Vector2 delta_pos);
 	virtual void OnRMouseDrag(Vector2 delta_pos);
 	virtual void OnKeyDown(const char key);
+	virtual void OnKeyUp(const char key);
 	~Window();
 protected:
 	HWND m_hwnd;

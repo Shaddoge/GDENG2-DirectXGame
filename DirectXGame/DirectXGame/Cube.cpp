@@ -97,9 +97,10 @@ void Cube::Draw(int width, int height)
 {
 	constant cc;
 	
-	Vector3 local_scale = GetLocalScale();
+	Vector3 scale = GetScale();
 	// Scale
-	cc.m_world.SetScale(Vector3(local_scale.x, local_scale.y, local_scale.z));
+	cc.m_world.SetIdentity();
+	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
 
 	Vector3 local_rotation = GetLocalRotation();
 	// Temp Matrix
@@ -117,13 +118,17 @@ void Cube::Draw(int width, int height)
 	temp.SetRotationX(local_rotation.x);
 	cc.m_world *= temp;
 
-	Vector3 local_pos = GetLocalPosition();
+	Vector3 world_pos = GetWorldPosition();
 	// Translate
-	temp.SetTranslate(Vector3(local_pos.x, local_pos.y, local_pos.z));
+	temp.SetIdentity();
+	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
+	
 	cc.m_world *= temp;
 
 	cc.m_view.SetIdentity();
-	cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	cc.m_view = this->m_view;
+	//cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	cc.m_projection.SetPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 	cc.m_angle = m_angle;
 
 	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
@@ -141,8 +146,8 @@ void Cube::Draw(int width, int height)
 	if (GetOutlined())
 	{
 		// Set Vertex Buffer for outline
-		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
-		GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
+		//GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
+		//GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
 	}
 
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
@@ -168,4 +173,9 @@ VertexBuffer Cube::GetVertexBuffer()
 void Cube::SetSpeed(float speed)
 {
 	this->m_speed = speed;
+}
+
+void Cube::SetViewMatrix(Matrix view)
+{
+	this->m_view = view;
 }

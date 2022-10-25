@@ -2,7 +2,6 @@
 
 Quad::Quad(string name) : GameObject(name)
 {
-	//EventManager::BindEvent("MouseMove", this);
 	quad_vertex vertex_list[4] = {
 		// X - Y - Z					Color
 		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
@@ -35,9 +34,9 @@ Quad::Quad(string name) : GameObject(name)
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(string name, Vector2 position) : GameObject(name)
+Quad::Quad(string name, Vector3 position) : GameObject(name)
 {
-	m_position = position;
+	SetPosition(position);
 	quad_vertex vertex_list[4] = {
 		// X - Y - Z					Color
 		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
@@ -71,7 +70,7 @@ Quad::Quad(string name, Vector2 position) : GameObject(name)
 }
 
 // With offset positioning
-Quad::Quad(string name, Vector2 dimension, Vector3 off_pos[2]) : GameObject(name)
+Quad::Quad(string name, Vector2 dimension) : GameObject(name)
 {
 	//EventManager::BindEvent("MouseMove", this);
 	float x_half = dimension.x / 2;
@@ -79,10 +78,10 @@ Quad::Quad(string name, Vector2 dimension, Vector3 off_pos[2]) : GameObject(name
 	quad_vertex vertex_list[4] = {
 		
 		// X - Y - Z													Color
-		{Vector3(-x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(x_half + off_pos[0].x,-y_half + off_pos[0].y, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(x_half + off_pos[0].x, y_half + off_pos[0].y, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
+		{Vector3(-x_half,-y_half , 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
+		{Vector3(-x_half, y_half , 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
+		{Vector3(x_half ,-y_half , 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
+		{Vector3(x_half , y_half , 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
 	};
 	
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -136,28 +135,48 @@ Quad::Quad(string name, quad_vertex vertex_list[4]) : GameObject(name)
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-void Quad::Update(RECT rc)
+void Quad::Update(float delta_time)
 {
-	m_delta_time = EngineTime::GetDeltaTime();
-	if (m_fixed_time)
-		m_angle += 1.57f * m_delta_time;
-	else
-	{
-		float multiplied_time = m_delta_time * m_time_multiplier;
-		m_time_multiplier = abs(sinf(m_time_tracker)) * 8;
-		m_time_tracker += m_delta_time * 0.2f;
+	m_angle += 1.57f * delta_time;
+	m_delta_scale += delta_time * m_speed;
+}
 
-		m_angle += 1.57f * multiplied_time;
-	}
-
+void Quad::Draw(int width, int height)
+{
 	constant cc;
-	cc.m_world.SetScale(Vector3(m_scale.x, m_scale.y, 0.0f));
-	Matrix mat_translate;
-	mat_translate.SetTranslate(Vector3(m_position.x, m_position.y, 0));
 
-	cc.m_world *= mat_translate;
+	Vector3 scale = GetScale();
+	// Scale
+	cc.m_world.SetIdentity();
+	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
+
+	Vector3 local_rotation = GetLocalRotation();
+	// Temp Matrix
+	Matrix temp;
+	// Rotation Z
+	temp.SetIdentity();
+	temp.SetRotationZ(local_rotation.z);
+	cc.m_world *= temp;
+	// Rotation Y
+	temp.SetIdentity();
+	temp.SetRotationY(local_rotation.y);
+	cc.m_world *= temp;
+	// Rotation X
+	temp.SetIdentity();
+	temp.SetRotationX(local_rotation.x);
+	cc.m_world *= temp;
+
+	Vector3 world_pos = GetWorldPosition();
+	// Translate
+	temp.SetIdentity();
+	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
+
+	cc.m_world *= temp;
+
 	cc.m_view.SetIdentity();
-	cc.m_projection.SetOrthoLH((rc.right - rc.left) / 400.0f, (rc.bottom - rc.top) / 400.0f, -4.0f, 4.0f);
+	cc.m_view = this->m_view;
+	//cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	cc.m_projection.SetPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
 	cc.m_angle = m_angle;
 
 	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
@@ -169,36 +188,25 @@ void Quad::Update(RECT rc)
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_vs);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_ps);
 
-	// Object 0
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_vb->GetSizeVertexList(), 0);
-}
+	// Set Index Buffer
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
+	//GraphicsEngine::Get()
+	if (GetOutlined())
+	{
+		// Set Vertex Buffer for outline
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
+	}
 
-void Quad::SetFixedTime(bool fixed)
-{
-	this->m_fixed_time = fixed;
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
 }
 
 Quad::~Quad()
 {
-	EventManager::UnbindListener("MouseMove", this);
 	m_vb->Release();
 	m_vs->Release();
 	m_ps->Release();
-}
-
-void Quad::Receive(string event_name, bool value)
-{
-	if (event_name != "MouseLDown") return;
-	
-	cout << "Mouse L Down: " << value << endl;
-}
-
-void Quad::Receive(string event_name, Vector2 pos)
-{
-	if (event_name != "MouseMove") return;
-
-	Translate(pos);
 }
 
 VertexBuffer Quad::GetVertexBuffer()
@@ -206,12 +214,12 @@ VertexBuffer Quad::GetVertexBuffer()
 	return *m_vb;
 }
 
-void Quad::Translate(Vector2 delta_pos)
+void Quad::SetSpeed(float speed)
 {
-	m_position += Vector2(m_delta_time * delta_pos.x * transform_speed, m_delta_time* delta_pos.y * transform_speed);
+	this->m_speed = speed;
 }
 
-void Quad::Scale(Vector2 delta_pos)
+void Quad::SetViewMatrix(Matrix view)
 {
-	m_scale += Vector2(m_delta_time * delta_pos.x * transform_speed, m_delta_time * delta_pos.y * transform_speed);
+	this->m_view = view;
 }

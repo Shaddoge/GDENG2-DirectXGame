@@ -17,7 +17,7 @@ void DeviceContext::ClearRenderTargetColor(SwapChain* swap_chain, float red, flo
 	m_device_context->ClearDepthStencilView(swap_chain->m_dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 	m_device_context->OMSetRenderTargets(1, &swap_chain->m_rtv, swap_chain->m_dsv);
 
-	-m_device_context->OMSetDepthStencilState(swap_chain->m_dss, 0);
+	//m_device_context->OMSetDepthStencilState(swap_chain->m_dss, 0);
 }
 
 void DeviceContext::SetVertexBuffer(VertexBuffer* vertex_buffer)

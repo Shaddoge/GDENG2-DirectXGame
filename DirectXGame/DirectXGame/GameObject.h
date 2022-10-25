@@ -30,13 +30,13 @@ public:
 	void SetPosition(Vector3 pos);
 	void SetPositionMouse(Vector2 delta_pos);
 	void SetPositionZMouse(Vector2 delta_pos);
-	Vector3 GetLocalPosition();
+	Vector3 GetWorldPosition();
 
 	void SetScale(float x, float y, float z);
 	void SetScale(Vector3 scale);
 	void SetScaleMouse(Vector2 delta_pos);
 	void SetScaleZMouse(Vector2 delta_pos);
-	Vector3 GetLocalScale();
+	Vector3 GetScale();
 
 	void SetRotation(float x, float y, float z);
 	void SetRotation(Vector3 rot);
@@ -49,8 +49,8 @@ public:
 private:
 	string name;
 	const float transform_speed = 0.15f;
-	Vector3 local_position;
-	Vector3 local_scale;
+	Vector3 world_position;
+	Vector3 scale;
 	Vector3 local_rotation;
 	bool is_outlined = false;
 };
