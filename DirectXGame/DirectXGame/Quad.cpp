@@ -37,12 +37,16 @@ Quad::Quad(string name) : GameObject(name)
 Quad::Quad(string name, Vector3 position) : GameObject(name)
 {
 	SetPosition(position);
+	Vector2 dimension = Vector2(1.0f, 1.0f);
+	float x_half = dimension.x / 2;
+	float y_half = dimension.y / 2;
+
 	quad_vertex vertex_list[4] = {
 		// X - Y - Z					Color
-		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-0.25f, 0.25f, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(0.25f,-0.25f, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(0.25f, 0.25f, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
+		{Vector3(-x_half,-y_half , 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
+		{Vector3(-x_half, y_half , 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
+		{Vector3(x_half ,-y_half , 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
+		{Vector3(x_half , y_half , 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -174,9 +178,9 @@ void Quad::Draw(int width, int height)
 	cc.m_world *= temp;
 
 	cc.m_view.SetIdentity();
-	cc.m_view = this->m_view;
+	cc.m_view = GetViewMatrix();
 	//cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
-	cc.m_projection.SetPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
+	cc.m_projection.SetPerspectiveFovLH(1.57f, (float)width / (float)height, 0.05f, 100.0f);
 	cc.m_angle = m_angle;
 
 	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
@@ -188,18 +192,16 @@ void Quad::Draw(int width, int height)
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_vs);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_ps);
 
-	// Set Index Buffer
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
 	//GraphicsEngine::Get()
 	if (GetOutlined())
 	{
 		// Set Vertex Buffer for outline
-		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
-		GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
+		//GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
+		//GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_vb_outline->GetSizeVertexList(), 0, 0);
 	}
 
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_vb->GetSizeVertexList(), 0, 0);
 }
 
 Quad::~Quad()
@@ -217,9 +219,4 @@ VertexBuffer Quad::GetVertexBuffer()
 void Quad::SetSpeed(float speed)
 {
 	this->m_speed = speed;
-}
-
-void Quad::SetViewMatrix(Matrix view)
-{
-	this->m_view = view;
 }

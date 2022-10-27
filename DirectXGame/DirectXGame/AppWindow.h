@@ -35,6 +35,8 @@ public:
 	virtual void OnUpdate() override;
 	virtual void OnDestroy() override;
 	virtual void OnResize(int width, int height) override;
+	virtual void OnRMouseDown() override;
+	virtual void OnRMouseUp() override;
 	virtual void OnLMouseDrag(Vector2 delta_pos) override;
 	virtual void OnRMouseDrag(Vector2 delta_pos) override;
 	virtual void OnKeyDown(const char key) override;

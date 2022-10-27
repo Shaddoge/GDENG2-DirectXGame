@@ -6,9 +6,9 @@
 
 using namespace std;
 
-enum MouseInputType
+enum class MouseInputType
 {
-	L = 0,
+	L,
 	R
 };
 
@@ -22,10 +22,12 @@ public:
 public:
 	static POINT GetPos();
 	static Vector2 GetDeltaPos();
-	static bool GetIsDown( MouseInputType type );
+	static bool GetIsDown( const MouseInputType& type );
 // Set
 public:
-	static void SetDown(MouseInputType type, bool is_down);
+	static void SetDown(const MouseInputType& type, bool is_down);
+	static void SetCursorPos(const POINT& pos);
+	static void ShowCursor(bool shown);
 // Event
 public:
 	static void OnDrag(POINT new_pos);

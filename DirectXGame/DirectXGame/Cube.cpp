@@ -97,7 +97,7 @@ void Cube::Draw(int width, int height)
 {
 	constant cc;
 	
-	Vector3 scale = GetScale();
+	Vector3 scale = Vector3(1,1,1);
 	// Scale
 	cc.m_world.SetIdentity();
 	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
@@ -122,13 +122,13 @@ void Cube::Draw(int width, int height)
 	// Translate
 	temp.SetIdentity();
 	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
-	
+
 	cc.m_world *= temp;
 
 	cc.m_view.SetIdentity();
-	cc.m_view = this->m_view;
+	cc.m_view = GetViewMatrix();
 	//cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
-	cc.m_projection.SetPerspectiveFovLH(1.57f, width / height, 0.1f, 100.0f);
+	cc.m_projection.SetPerspectiveFovLH(1.57f, (float) width / (float) height, 0.05f, 100.0f);
 	cc.m_angle = m_angle;
 
 	m_cb->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
@@ -173,9 +173,4 @@ VertexBuffer Cube::GetVertexBuffer()
 void Cube::SetSpeed(float speed)
 {
 	this->m_speed = speed;
-}
-
-void Cube::SetViewMatrix(Matrix view)
-{
-	this->m_view = view;
 }

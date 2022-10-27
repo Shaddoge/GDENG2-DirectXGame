@@ -12,34 +12,41 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
     case WM_SIZE:
     {
-        window->OnResize(LOWORD(lparam), HIWORD(lparam));
+        Vector2 new_size = Vector2(window->GetClientWindowRect().right - window->GetClientWindowRect().left, window->GetClientWindowRect().bottom - window->GetClientWindowRect().top);
+        cout << new_size.x << "," << new_size.y << endl;
+        window->OnResize(new_size.x, new_size.y);
         break;
     }
     // MOUSE
     case WM_RBUTTONDOWN:
     {
         Mouse::SetDown(MouseInputType::R, true);
+        window->OnRMouseDown();
         break;
     }
     case WM_RBUTTONUP:
     {
         Mouse::SetDown(MouseInputType::R, false);
+        window->OnRMouseUp();
         break;
     }
     case WM_LBUTTONDOWN:
     {   
         Mouse::SetDown(MouseInputType::L, true);
+        window->OnLMouseDown();
         break;
     }
     case WM_LBUTTONUP:
     {
         Mouse::SetDown(MouseInputType::L, false);
+        window->OnLMouseUp();
         break;
     }
     case WM_MOUSEMOVE: {
         //                x               y
         POINT new_pos = { LOWORD(lparam), HIWORD(lparam) };
         Mouse::OnDrag(new_pos);
+        
         if (Mouse::GetIsDown(MouseInputType::L))
         {                   
             window->OnLMouseDrag(Mouse::GetDeltaPos());
@@ -119,7 +126,7 @@ bool Window::Init()
 
     // Window creation
     m_hwnd = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, L"MyWindowClass", L"DirectX Application", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-        1024, 768, NULL, NULL, NULL, this);
+        1600, 900, NULL, NULL, NULL, this);
     
     // If creation fails
     if (!m_hwnd)
@@ -194,11 +201,27 @@ void Window::OnResize(int width, int height)
 {
 }
 
+void Window::OnLMouseDown()
+{
+}
+
+void Window::OnRMouseDown()
+{
+}
+
+void Window::OnLMouseUp()
+{
+}
+
+void Window::OnRMouseUp()
+{
+}
+
 void Window::OnLMouseDrag(Vector2 delta_pos)
 {
 }
 
-void  Window::OnRMouseDrag(Vector2 delta_pos)
+void Window::OnRMouseDrag(Vector2 delta_pos)
 {
 }
 

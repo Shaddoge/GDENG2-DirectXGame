@@ -1,8 +1,8 @@
 #include "Camera.h"
 #include <stdio.h>
-Camera::Camera()
+Camera::Camera(string name) : GameObject(name)
 {
-	world_cam.SetTranslate(Vector3(0, 0, -2));
+	world_cam.SetTranslate(Vector3(0, 0.5f, -2.0f));
 }
 
 Camera::~Camera()
@@ -15,15 +15,21 @@ void Camera::Update(float delta_time)
 	new_world_cam.SetIdentity();
 
 	Matrix temp;
+	Vector3 local_rotation = GetLocalRotation();
 	temp.SetIdentity();
-	temp.SetRotationX(rotation.x);
+	temp.SetRotationX(local_rotation.x);
 	new_world_cam *= temp;
 
 	temp.SetIdentity();
-	temp.SetRotationY(rotation.y);
+	temp.SetRotationY(local_rotation.y);
 	new_world_cam *= temp;
 
+	// Forward
 	Vector3 new_pos = world_cam.GetTranslation() + world_cam.GetZDirection() * (forward * translate_speed);
+	// Right
+	new_pos = new_pos + world_cam.GetXDirection() * (right * translate_speed);
+	// Top
+	new_pos = new_pos + world_cam.GetYDirection() * (top * translate_speed);
 	new_world_cam.SetTranslate(new_pos);
 
 	world_cam = new_world_cam;
@@ -41,8 +47,19 @@ void Camera::SetForward(float value)
 	forward = value;
 }
 
+void Camera::SetRight(float value)
+{
+	right = value;
+}
+
+void Camera::SetTop(float value)
+{
+	top = value;
+}
+
 void Camera::SetRotationMouse(Vector2 delta_pos)
 {
 	delta_pos *= look_speed;
-	this->rotation = Vector3(rotation.x - delta_pos.y, rotation.y + delta_pos.x, rotation.z);
+	Vector3 local_rotation = GetLocalRotation();
+	SetRotation(Vector3(local_rotation.x - delta_pos.y, local_rotation.y + delta_pos.x, local_rotation.z));
 }

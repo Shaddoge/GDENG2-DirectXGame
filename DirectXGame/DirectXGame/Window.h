@@ -23,6 +23,10 @@ public:
 	virtual void OnUpdate();
 	virtual void OnDestroy();
 	virtual void OnResize(int width, int height);
+	virtual void OnLMouseDown();
+	virtual void OnRMouseDown();
+	virtual void OnLMouseUp();
+	virtual void OnRMouseUp();
 	virtual void OnLMouseDrag(Vector2 delta_pos);
 	virtual void OnRMouseDrag(Vector2 delta_pos);
 	virtual void OnKeyDown(const char key);

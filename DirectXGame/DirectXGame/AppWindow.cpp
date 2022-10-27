@@ -13,30 +13,35 @@ AppWindow::~AppWindow()
 
 void AppWindow::Update(float delta_time)
 {
+	Matrix world_cam = scene_camera->GetInverseWorldCam();
 	// Quads
-	/*for (Quad* quad_ptr : quads)
+	for (Quad* quad_ptr : quads)
 	{
-		quad_ptr->Update(rc);
-	}*/
+		quad_ptr->SetViewMatrix(world_cam);
+		quad_ptr->Update(delta_time);
+		quad_ptr->Draw(width, height);
+	}
 	scene_camera->Update(delta_time);
+	
 	// Cubes
 	for (Cube* cube_ptr : cubes)
 	{
-		cube_ptr->SetViewMatrix(scene_camera->GetInverseWorldCam());
+		cube_ptr->SetViewMatrix(world_cam);
 		cube_ptr->Update(delta_time);
 		cube_ptr->Draw(width, height);
 	}
 
 	// Plane
-	plane->SetViewMatrix(scene_camera->GetInverseWorldCam());
+	plane->SetViewMatrix(world_cam);
 	plane->Update(delta_time);
 	plane->Draw(width, height);
-
+	
 	m_swap_chain->Present(true);
 }
 
 void AppWindow::OnCreate()
 {
+	srand(time(0));
 	Mouse::Initialize();
 	EngineTime::Initialize();
 	EventManager::Initialize();
@@ -49,30 +54,32 @@ void AppWindow::OnCreate()
 	m_swap_chain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 	
 	// Camera
-	scene_camera = new Camera();
+	scene_camera = new Camera("Main Camera");
 	
 	// Quads
 	/*Quad* quad_ptr;
 	for (int i = 0; i < 3; i++)
 	{
-		Vector2 vec = Vector2(-0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Offset
-		quad_ptr = new Quad(vec);
+		Vector3 vec = Vector3(-0.6 + (i * 0.6), -0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Position
+		quad_ptr = new Quad("Quad" + to_string(i), vec);
 		quads.push_back(quad_ptr);
 		//EventManager::BindListener("MouseLDown", quad_ptr);
 	}*/
 	
 	// Cubes
 	Cube* cube_ptr;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		cube_ptr = new Cube("Cube " + to_string(i));
 		Vector3 rand_position = Vector3(((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f);
 		cube_ptr->SetSpeed(((rand() % 200) - 100) / 50.0f);
-		cube_ptr->SetPosition(rand_position);
+		//cube_ptr->SetPosition(rand_position);
+		cube_ptr->SetPosition(Vector3(0,0.25f,0));
 		cubes.push_back(cube_ptr);
 	}
 
 	plane = new Plane("Plane");
+	plane->SetScale(Vector3(2, 2, 2));
 }
 
 void AppWindow::OnUpdate()
@@ -120,29 +127,39 @@ void AppWindow::OnResize(int width, int height)
 	this->height = height;
 }
 
+void AppWindow::OnRMouseDown()
+{
+	Mouse::ShowCursor(false);
+}
+
+void AppWindow::OnRMouseUp()
+{
+	Mouse::ShowCursor(true);
+}
+
 void AppWindow::OnLMouseDrag(Vector2 delta_pos)
 {
 	if (Mouse::GetIsDown(MouseInputType::R)) return;
 	delta_pos *= delta_time;
+
 	if (selected_obj >= 0 and selected_obj <= 2)
 	{
 		switch (transform_mode)
 		{
-			case TRANSLATE: cubes[selected_obj]->SetPositionMouse(delta_pos); break;
-			case SCALE: cubes[selected_obj]->SetScaleMouse(delta_pos); break;
-			case ROTATE: cubes[selected_obj]->SetRotationMouse(delta_pos); break;
-			default: break;
+		case TRANSLATE: cubes[selected_obj]->SetPositionMouse(delta_pos); break;
+		case SCALE: cubes[selected_obj]->SetScaleMouse(delta_pos); break;
+		case ROTATE: cubes[selected_obj]->SetRotationMouse(delta_pos); break;
+		default: break;
 		}
 	}
 }
 
-// Control camera
 void AppWindow::OnRMouseDrag(Vector2 delta_pos)
 {
 	delta_pos *= delta_time;
+	
 	// Camera
 	scene_camera->SetRotationMouse(delta_pos);
-
 	/*
 	switch (transform_mode)
 	{
@@ -151,7 +168,6 @@ void AppWindow::OnRMouseDrag(Vector2 delta_pos)
 		default: break;
 	}
 
-	
 	if (selected_obj >= 0 and selected_obj <= 2)
 	{
 		switch (transform_mode)
@@ -169,7 +185,6 @@ void AppWindow::OnRMouseDrag(Vector2 delta_pos)
 		default: break;
 		}
 	}*/
-	
 }
 
 void AppWindow::OnKeyDown(const char key)
@@ -195,12 +210,26 @@ void AppWindow::OnKeyDown(const char key)
 					scene_camera->SetForward(1.0f);
 					break;
 				}
-				case 'a':  break;
+				case 'a': {
+					scene_camera->SetRight(-1.0f);
+					break;
+				}	
 				case 's': {
 					scene_camera->SetForward(-1.0f);
 					break;
 				}
-				case 'd':  break;
+				case 'd': {
+					scene_camera->SetRight(1.0f);
+					break;
+				}
+				case 'q': {
+					scene_camera->SetTop(-1.0f);
+					break;
+				}
+				case 'e': {
+					scene_camera->SetTop(1.0f);
+					break;
+				}
 				default: return; break;
 			}
 		}
@@ -225,12 +254,26 @@ void AppWindow::OnKeyUp(const char key)
 			scene_camera->SetForward(0.0f);
 			break;
 		}
-		case 'a':  break;
+		case 'a': {
+			scene_camera->SetRight(0.0f);
+			break;
+		}
 		case 's': {
 			scene_camera->SetForward(0.0f);
 			break;
 		}
-		case 'd':  break;
+		case 'd': {
+			scene_camera->SetRight(0.0f);
+			break;
+		}
+		case 'q': {
+			scene_camera->SetTop(0.0f);
+			break;
+		}
+		case 'e': {
+			scene_camera->SetTop(0.0f);
+			break;
+		}
 		default: return; break;
 	}
 }

@@ -18,23 +18,23 @@ Vector2 Mouse::GetDeltaPos()
 	return sharedInstance->delta_pos;
 }
 
-bool Mouse::GetIsDown(MouseInputType type)
+bool Mouse::GetIsDown(const MouseInputType& type)
 {
 	switch (type)
 	{
-		case L: //std::cout << "Get L" << std::endl; 
-				return sharedInstance->l_is_down; break;
-		case R: //std::cout << "Get R" << std::endl; 
+		case MouseInputType::L: //std::cout << "Get L" << std::endl; 
+					return sharedInstance->l_is_down; break;
+		case MouseInputType::R: //std::cout << "Get R" << std::endl; 
 				return sharedInstance->r_is_down; break;
 		default: return false;
 	}
 }
 
-void Mouse::SetDown(MouseInputType type, bool is_down)
+void Mouse::SetDown(const MouseInputType& type, bool is_down)
 {
 	switch (type)
 	{
-		case L: {
+		case MouseInputType::L: {
 			EventManager::Invoke("MouseLDown", is_down);
 			sharedInstance->l_is_down = is_down; 
 			if (!is_down)
@@ -43,7 +43,7 @@ void Mouse::SetDown(MouseInputType type, bool is_down)
 			}
 			break;
 		}
-		case R: {
+		case MouseInputType::R: {
 			EventManager::Invoke("MouseRDown", is_down);
 			sharedInstance->r_is_down = is_down; break;
 			if (!is_down)
@@ -53,6 +53,17 @@ void Mouse::SetDown(MouseInputType type, bool is_down)
 		}
 		default: break;
 	}
+}
+
+void Mouse::SetCursorPos(const POINT& pos)
+{
+	::SetCursorPos(pos.x, pos.y);
+	sharedInstance->old_pos = {pos.x, pos.y};
+}
+
+void Mouse::ShowCursor(bool shown)
+{
+	::ShowCursor(shown);
 }
 
 void Mouse::OnDrag(POINT new_pos)

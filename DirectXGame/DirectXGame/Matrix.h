@@ -18,7 +18,9 @@ public:
 	void SetRotationZ(float z);
 	void SetMatrix(const Matrix matrix);
 	Vector3 GetZDirection();
+	Vector3 GetYDirection();
 	Vector3 GetXDirection();
+	
 	Vector3 GetTranslation();
 	void SetPerspectiveFovLH(float fov, float aspect, float znear, float zfar);
 	void SetOrthoLH(float width, float height, float near_plane, float far_plane);
