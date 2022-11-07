@@ -49,7 +49,7 @@ public:
 
 	Matrix GetViewMatrix() { return view; };
 	void SetViewMatrix(Matrix view_matrix) { view = view_matrix; };
-private:
+private:	
 	float m_angle = 0.0f;
 	float m_speed = 0.0f;
 	float m_delta_scale = 0.0f;

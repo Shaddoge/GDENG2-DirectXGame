@@ -3,7 +3,7 @@
 Cube::Cube(string name) : GameObject(name)
 {
 	// Outline
-	float cube_size = 0.25f;
+	float cube_size = 1.0f;
 	float outline_scale = 1.1f;
 	cube_vertex vertex_list_outline[8] = {
 		// X - Y - Z						Color
@@ -23,19 +23,19 @@ Cube::Cube(string name) : GameObject(name)
 	cube_vertex vertex_list[8] = {
 		// X - Y - Z						Color
 		// Front Face
-		{Vector3(-(cube_size/2),-(cube_size/2), -(cube_size/2)),	Vector3(0,0,0),		Vector3(0,0,0)},
-		{Vector3(-(cube_size/2), (cube_size/2), -(cube_size/2)),	Vector3(1,1,1),		Vector3(0,0,0)},
-		{Vector3( (cube_size/2), (cube_size/2), -(cube_size/2)),	Vector3(1,1,1),		Vector3(0,0,0)},
-		{Vector3( (cube_size/2),-(cube_size/2), -(cube_size/2)),	Vector3(0,0,0),		Vector3(0,0,0)},
+		{Vector3(-(cube_size/2),-(cube_size/2), -(cube_size/2)),Vector3(1,0,0),		Vector3(1,0,0)},
+		{Vector3(-(cube_size/2), (cube_size/2), -(cube_size/2)),Vector3(0,1,0),		Vector3(0,1,0)},
+		{Vector3( (cube_size/2), (cube_size/2), -(cube_size/2)),Vector3(0,0,1),		Vector3(0,0,1)},
+		{Vector3( (cube_size/2),-(cube_size/2), -(cube_size/2)),Vector3(0,0,0),		Vector3(0,0,0)},
 
 		// Back Face
-		{Vector3( (cube_size/2),-(cube_size/2), (cube_size/2)),		Vector3(0,0,0),		Vector3(0,0,0)},
-		{Vector3( (cube_size/2), (cube_size/2), (cube_size/2)),		Vector3(1,1,1),		Vector3(0,0,0)},
-		{Vector3(-(cube_size/2), (cube_size/2), (cube_size/2)),		Vector3(1,1,1),		Vector3(0,0,0)},
-		{Vector3(-(cube_size/2),-(cube_size/2), (cube_size/2)),		Vector3(0,0,0),		Vector3(0,0,0)}
+		{Vector3( (cube_size/2),-(cube_size/2), (cube_size/2)), Vector3(1,0,1),		Vector3(1,0,1)},
+		{Vector3( (cube_size/2), (cube_size/2), (cube_size/2)), Vector3(0,1,1),		Vector3(0,1,1)},
+		{Vector3(-(cube_size/2), (cube_size/2), (cube_size/2)), Vector3(1,1,0),		Vector3(1,1,0)},
+		{Vector3(-(cube_size/2),-(cube_size/2), (cube_size/2)), Vector3(1,1,1),		Vector3(1,1,1)}
 	};
 
-	m_vb_outline = GraphicsEngine::Get()->CreateVertexBuffer();
+	//m_vb_outline = GraphicsEngine::Get()->CreateVertexBuffer();
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
 	UINT size_vertex_list = ARRAYSIZE(vertex_list);
 
@@ -71,7 +71,7 @@ Cube::Cube(string name) : GameObject(name)
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_vb_outline->Load(&vertex_list_outline, sizeof(cube_vertex), size_vertex_list, shader_byte_code, size_shader);
+	//m_vb_outline->Load(&vertex_list_outline, sizeof(cube_vertex), size_vertex_list, shader_byte_code, size_shader);
 	m_vb->Load(&vertex_list, sizeof(cube_vertex), size_vertex_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
@@ -91,13 +91,22 @@ void Cube::Update(float delta_time)
 {
 	m_angle += 1.57f * delta_time;
 	m_delta_scale += delta_time * m_speed;
+
+	//Vector3 world_position = GetWorldPosition();
+	//this->SetPosition(world_position.lerp(Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), sin(m_delta_scale)));
+
+	//Vector3 scale = GetScale();
+	//this->SetScale(scale.lerp(Vector3(1.0f, 1.0f, 1.0f), Vector3(2.0f, 0.0f, 2.0f), abs(sin(m_delta_scale))));
+	
+	//Vector3 local_rotation = GetLocalRotation();
+	//this->SetRotation(m_delta_scale, m_delta_scale, m_delta_scale);
 }
 
 void Cube::Draw(int width, int height)
 {
 	constant cc;
 	
-	Vector3 scale = Vector3(1,1,1);
+	Vector3 scale = GetScale();
 	// Scale
 	cc.m_world.SetIdentity();
 	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
@@ -142,12 +151,12 @@ void Cube::Draw(int width, int height)
 	
 	// Set Index Buffer
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
-	//GraphicsEngine::Get()
+	
 	if (GetOutlined())
 	{
 		// Set Vertex Buffer for outline
-		//GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
-		//GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
 	}
 
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
@@ -157,7 +166,7 @@ void Cube::Draw(int width, int height)
 Cube::~Cube()
 {
 	EventManager::UnbindListener("MouseMove", this);
-	m_vb_outline->Release();
+	//m_vb_outline->Release();
 	m_vb->Release();
 	m_ib->Release();
 	m_cb->Release();

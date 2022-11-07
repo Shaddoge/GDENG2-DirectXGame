@@ -11,6 +11,7 @@ public:
 	void operator*=(const float value);
 	Vector3 operator*(const float value);
 	Vector3 operator+(const Vector3& vector);
+	Vector3 lerp(const Vector3& a, const Vector3& b, float delta);
 public:
 	float x, y, z;
 };

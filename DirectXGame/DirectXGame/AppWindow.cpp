@@ -32,9 +32,12 @@ void AppWindow::Update(float delta_time)
 	}
 
 	// Plane
-	plane->SetViewMatrix(world_cam);
-	plane->Update(delta_time);
-	plane->Draw(width, height);
+	for (Plane* plane_ptr : planes)
+	{
+		plane_ptr->SetViewMatrix(world_cam);
+		plane_ptr->Update(delta_time);
+		plane_ptr->Draw(width, height);
+	}
 	
 	m_swap_chain->Present(true);
 }
@@ -57,29 +60,105 @@ void AppWindow::OnCreate()
 	scene_camera = new Camera("Main Camera");
 	
 	// Quads
-	/*Quad* quad_ptr;
+	Quad* quad_ptr;
 	for (int i = 0; i < 3; i++)
 	{
 		Vector3 vec = Vector3(-0.6 + (i * 0.6), -0.6 + (i * 0.6), -0.6 + (i * 0.6)); // Position
 		quad_ptr = new Quad("Quad" + to_string(i), vec);
 		quads.push_back(quad_ptr);
 		//EventManager::BindListener("MouseLDown", quad_ptr);
-	}*/
+	}
 	
+	/*-- Question 6 --*/
+	/*
 	// Cubes
 	Cube* cube_ptr;
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		cube_ptr = new Cube("Cube " + to_string(i));
-		Vector3 rand_position = Vector3(((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f);
-		cube_ptr->SetSpeed(((rand() % 200) - 100) / 50.0f);
+		cube_ptr = new Cube("Cube " + to_string(i + 1));
+		//Vector3 rand_position = Vector3(((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f, ((rand() % 200) - 100) / 150.0f);
+		// Random
+		//cube_ptr->SetSpeed((((rand() % 200) - 100) / 50.0f) + 0.25f);
 		//cube_ptr->SetPosition(rand_position);
-		cube_ptr->SetPosition(Vector3(0,0.25f,0));
+
+		cube_ptr->SetSpeed(1.0f);
+		Vector3 position;
+		switch (i)
+		{
+		case 0: position = Vector3(0.0f, 0.9f, 0.0f); break;
+		case 1: position = Vector3(-1.5f, 2.0f, 0.0f); break;
+		case 2: position = Vector3(-1.5f, 3.0f, -2.0f); break;
+		default: position = Vector3(0.0f, 0.0f, 0.0f); break;
+		}
+
+		cube_ptr->SetPosition(position);
 		cubes.push_back(cube_ptr);
 	}
 
-	plane = new Plane("Plane");
-	plane->SetScale(Vector3(2, 2, 2));
+	// Create plane
+	Plane* plane_ptr = new Plane("Plane");
+	plane_ptr->SetScale(Vector3(10.0f, 10.0f, 10.0f));
+	plane_ptr->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	planes.push_back(plane_ptr);
+	*/
+
+	/*-- Question 7 --*/
+	
+	Plane* plane_ptr;
+	// 6 Cards Slanted
+	for (int i = 0; i < 3; i++)
+	{
+		float xOffset = 0.0f;
+		if (i != 0)
+		{
+			xOffset = i * -0.55f;
+		}
+		for (int j = i; j < 3; j++)
+		{
+			plane_ptr = new Plane("Card");
+			plane_ptr->SetScale(Vector3(1.5, 0, 1));
+			plane_ptr->SetPosition(Vector3((j * 1.1f) + xOffset, i * 1.4f, 0));
+			plane_ptr->SetRotation(Vector3(0.0f, 0.0f, 1.2f));
+
+			planes.push_back(plane_ptr);
+		}
+	}
+	// 6 Cards Slanted Opposite
+	for (int i = 0; i < 3; i++)
+	{
+		float xOffset = 0.0f;
+		if (i != 0)
+		{
+			xOffset = i * -0.55f;
+		}
+		for (int j = i; j < 3; j++)
+		{
+			plane_ptr = new Plane("Card");
+			plane_ptr->SetScale(Vector3(1.5, 0, 1));
+			plane_ptr->SetPosition(Vector3((j * 1.1f) + xOffset + 0.55f, i * 1.4f, 0));
+			plane_ptr->SetRotation(Vector3(0.0f, 0.0f, -1.2f));
+
+			planes.push_back(plane_ptr);
+		}
+	}
+	
+	// 3 Cards Platform
+	for (int i = 0; i < 3; i++)
+	{
+		float xOffset = 0.2f;
+		float yOffset = 0.7f;
+		if (i > 1)
+		{
+			xOffset = -1.7f;
+			yOffset = 2.1f;
+		}
+
+		plane_ptr = new Plane("Card");
+		plane_ptr->SetScale(Vector3(1.5, 0, 1));
+		plane_ptr->SetPosition(Vector3((i * 1.25f) + xOffset + 0.55f, yOffset, 0));
+
+		planes.push_back(plane_ptr);
+	}
 }
 
 void AppWindow::OnUpdate()
@@ -114,7 +193,11 @@ void AppWindow::OnDestroy()
 	}
 	cubes.clear();
 
-	delete plane;
+	for (Plane* plane_ptr : planes)
+	{
+		delete plane_ptr;
+	}
+	planes.clear();
 
 	m_swap_chain->Release();
 	
@@ -138,11 +221,11 @@ void AppWindow::OnRMouseUp()
 }
 
 void AppWindow::OnLMouseDrag(Vector2 delta_pos)
-{
+{/*
 	if (Mouse::GetIsDown(MouseInputType::R)) return;
 	delta_pos *= delta_time;
 
-	if (selected_obj >= 0 and selected_obj <= 2)
+	if (selected_obj >= 0 and selected_obj <= 3)
 	{
 		switch (transform_mode)
 		{
@@ -151,7 +234,7 @@ void AppWindow::OnLMouseDrag(Vector2 delta_pos)
 		case ROTATE: cubes[selected_obj]->SetRotationMouse(delta_pos); break;
 		default: break;
 		}
-	}
+	}*/
 }
 
 void AppWindow::OnRMouseDrag(Vector2 delta_pos)
@@ -191,14 +274,14 @@ void AppWindow::OnKeyDown(const char key)
 {
 	int num = key - '0';
 	if (num >= 1 && num <= 3)
-	{
+	{/*
 		selected_obj = num - 1;
 		
 		for (Cube* cube : cubes)
 		{
 			cube->SetOutlined(false);
 		}
-		cubes[selected_obj]->SetOutlined(true);
+		cubes[selected_obj]->SetOutlined(true);*/
 	}
 	else
 	{

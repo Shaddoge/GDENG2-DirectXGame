@@ -5,7 +5,7 @@ Plane::Plane(string name) : GameObject(name)
 	plane_vertex vertex_list[8] = {
 		// X - Y - Z						Color
 		// Front Face
-		{Vector3(-0.5f,-0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
+		{Vector3(-0.5f,-0.0f, -0.5f),	Vector3(0,0,0),		Vector3(0,0,0)},
 		{Vector3(-0.5f, 0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
 		{Vector3( 0.5f, 0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
 		{Vector3( 0.5f,-0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
@@ -14,7 +14,7 @@ Plane::Plane(string name) : GameObject(name)
 		{Vector3( 0.5f,-0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
 		{Vector3( 0.5f, 0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
 		{Vector3(-0.5f, 0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3(-0.5f,-0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)}
+		{Vector3(-0.5f,-0.0f, 0.5f),	Vector3(0,0,0),		Vector3(0,0,0)}
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -107,7 +107,7 @@ void Plane::Draw(int width, int height)
 
 	cc.m_view.SetIdentity();
 	cc.m_view = GetViewMatrix();
-	//cc.m_projection.SetOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	//cc.m_projection.SetOrthoLH(width / 100.0f, height / 100.0f, -4.0f, 4.0f);
 	cc.m_projection.SetPerspectiveFovLH(1.57f, (float)width / (float)height, 0.05f, 100.0f);
 	cc.m_angle = m_angle;
 
@@ -122,14 +122,6 @@ void Plane::Draw(int width, int height)
 
 	// Set Index Buffer
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
-	//GraphicsEngine::Get()
-	if (GetOutlined())
-	{
-		// Set Vertex Buffer for outline
-		//GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb_outline);
-		//GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
-	}
-
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexedTriangleList(m_ib->GetSizeIndexList(), 0, 0);
 }

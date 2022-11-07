@@ -2,7 +2,9 @@
 #include <stdio.h>
 Camera::Camera(string name) : GameObject(name)
 {
-	world_cam.SetTranslate(Vector3(0, 0.5f, -2.0f));
+	// Initialize position and rotation of camera
+	SetRotation(Vector3(0.5f, -0.9f, 0.0f));
+	world_cam.SetTranslate(Vector3(5.0, 3.5f, -2.5f));
 }
 
 Camera::~Camera()

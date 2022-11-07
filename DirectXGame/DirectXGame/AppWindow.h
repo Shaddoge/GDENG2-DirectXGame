@@ -52,7 +52,7 @@ private:
 	Camera* scene_camera;
 	vector<Quad*> quads;
 	vector<Cube*> cubes;
-	Plane* plane;
+	vector<Plane*> planes;
 
 	float delta_time = 0.0f;
 	int selected_obj = 0;

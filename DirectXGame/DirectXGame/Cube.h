@@ -7,6 +7,7 @@
 struct cube_vertex
 {
 	Vector3 position;
+	Vector3 position1;
 	Vector3 color;
 	Vector3 color1;
 };

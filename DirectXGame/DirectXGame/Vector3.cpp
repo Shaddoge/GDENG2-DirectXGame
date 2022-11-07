@@ -49,3 +49,14 @@ Vector3 Vector3::operator+(const Vector3& vector)
 {
 	return Vector3(x + vector.x, y + vector.y, z + vector.z);
 }
+
+Vector3 Vector3::lerp(const Vector3& a, const Vector3& b, float delta)
+{
+	Vector3 lerped = {
+		a.x + delta * (b.x - a.x),
+		a.y + delta * (b.y - a.y),
+		a.z + delta * (b.z - a.z),
+	};
+
+	return lerped;
+}
