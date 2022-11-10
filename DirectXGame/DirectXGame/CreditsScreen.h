@@ -7,6 +7,5 @@ public:
 	CreditsScreen();
 	~CreditsScreen();
 	void DrawUI() override;
-	void Receive(String eventName, bool isActive) override;
 };
 

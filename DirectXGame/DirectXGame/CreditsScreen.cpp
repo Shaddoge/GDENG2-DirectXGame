@@ -2,12 +2,12 @@
 
 CreditsScreen::CreditsScreen() : UIScreen("CreditsScreen", false)
 {
-	EventManager::BindListener("ToggleCreditsScreen", this);
+	//EventManager::BindListener("ToggleCreditsScreen", this);
 }
 
 CreditsScreen::~CreditsScreen()
 {
-	EventManager::UnbindListener("ToggleCreditsScreen", this);
+	//EventManager::UnbindListener("ToggleCreditsScreen", this);
 }
 
 void CreditsScreen::DrawUI()
@@ -31,12 +31,4 @@ void CreditsScreen::DrawUI()
 	ImGui::Text("PardCode Game Engine Tutorial");
 	ImGui::Text("Sir Neil's GDENG2 Course");
 	ImGui::End();
-}
-
-void CreditsScreen::Receive(String eventName, bool isActive)
-{
-	if (eventName == "ToggleCreditsScreen")
-	{
-		this->SetActive(isActive);
-	}
 }

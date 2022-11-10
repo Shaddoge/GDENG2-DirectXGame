@@ -12,6 +12,7 @@
 #include "DeviceContext.h"
 #include "MenuBar.h"
 #include "CreditsScreen.h"
+#include "ColorPicker.h"
 #include "EventListener.h"
 
 class UINames {

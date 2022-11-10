@@ -12,7 +12,7 @@
 typedef std::string String;
 class UIManager;
 
-class UIScreen : public EventListener
+class UIScreen
 {
 protected:
 	typedef std::string String;

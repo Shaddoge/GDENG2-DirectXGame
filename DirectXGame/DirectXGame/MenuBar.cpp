@@ -16,8 +16,12 @@ void MenuBar::DrawUI()
         {
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Edit"))
+        if (ImGui::BeginMenu("Tools"))
         {
+            if (ImGui::MenuItem("Color Picker"))
+            {
+                UIManager::Get()->ToggleUI("COLOR_PICKER");
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("About"))

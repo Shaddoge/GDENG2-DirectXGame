@@ -64,6 +64,10 @@ UIManager::UIManager(HWND hwnd)
 	CreditsScreen* creditsScreen = new CreditsScreen();
 	this->uiTable[uiNames.CREDITS_SCREEN] = creditsScreen;
 	this->uiList.push_back(creditsScreen);
+
+	ColorPicker* colorPicker = new ColorPicker();
+	this->uiTable[uiNames.COLOR_PICKER] = colorPicker;
+	this->uiList.push_back(colorPicker);
 }
 
 UIManager::~UIManager()
