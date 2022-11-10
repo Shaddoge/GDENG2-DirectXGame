@@ -38,6 +38,9 @@ void AppWindow::Update(float delta_time)
 		plane_ptr->Update(delta_time);
 		plane_ptr->Draw(width, height);
 	}
+
+	// Draw UI
+	UIManager::Get()->DrawAllUI();
 	
 	m_swap_chain->Present(true);
 }
@@ -56,6 +59,8 @@ void AppWindow::OnCreate()
 	RECT rc = this->GetClientWindowRect();
 	m_swap_chain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 	
+	UIManager::Initialize(this->m_hwnd);
+
 	// Camera
 	scene_camera = new Camera("Main Camera");
 	
@@ -164,12 +169,12 @@ void AppWindow::OnCreate()
 void AppWindow::OnUpdate()
 {
 	Window::OnUpdate();
+	
 	// Clear render target
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->ClearRenderTargetColor(this->m_swap_chain, 0, 0.3f, 0.4f, 1);
 	// Set viewport of render
 	RECT rc = this->GetClientWindowRect();
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
-	
 	delta_time = EngineTime::GetDeltaTime();
 
 	Update(delta_time);

@@ -67,6 +67,18 @@ void EventManager::Invoke(string name, bool value)
 	}
 }
 
+void EventManager::Invoke(string name, string value)
+{
+	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	if (iterator != sharedInstance->binded_events.end())
+	{
+		for (auto const& listener : iterator->second)
+		{
+			listener->Receive(name, value);
+		}
+	}
+}
+
 void EventManager::Invoke(string name, int value)
 {
 	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);

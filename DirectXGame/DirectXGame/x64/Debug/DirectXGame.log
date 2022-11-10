@@ -1,2 +1,13 @@
-﻿  Camera.cpp
+﻿  AppWindow.cpp
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(50,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(71,66): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(71,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(71,30): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\DirectXGame\AppWindow.cpp(178,39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  ColorPicker.cpp
+  CreditsScreen.cpp
+  main.cpp
+  MenuBar.cpp
+  UIManager.cpp
+  Generating Code...
   DirectXGame.vcxproj -> C:\Users\John\Desktop\GDENG2\DirectXGame Repository\DirectXGame\x64\Debug\DirectXGame.exe

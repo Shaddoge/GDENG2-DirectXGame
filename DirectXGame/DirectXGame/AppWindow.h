@@ -13,6 +13,7 @@
 #include "Plane.h"
 #include "EventManager.h"
 #include "Camera.h"
+#include "UIManager.h"
 #include <vector>
 
 enum TransformMode

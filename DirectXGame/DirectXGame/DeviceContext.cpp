@@ -93,6 +93,11 @@ bool DeviceContext::Release()
 	return true;
 }
 
+ID3D11DeviceContext* DeviceContext::GetContext()
+{
+	return m_device_context;
+}
+
 DeviceContext::~DeviceContext()
 {
 }

@@ -19,6 +19,7 @@ public:
 	static void UnbindListener(string name, EventListener* event);
 	static void Invoke(string name);
 	static void Invoke(string name, bool value);
+	static void Invoke(string name, string value);
 	static void Invoke(string name, int value);
 	static void Invoke(string name, float value);
 	static void Invoke(string name, Vector2 value);

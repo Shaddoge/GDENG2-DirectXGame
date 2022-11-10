@@ -16,6 +16,10 @@ void EventListener::Receive(string event_name, bool value)
 {
 }
 
+void EventListener::Receive(string event_name, string string_name)
+{
+}
+
 void EventListener::Receive(string event_name, int value)
 {
 }

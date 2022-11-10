@@ -12,6 +12,7 @@ public:
 	~EventListener();
 	virtual void Receive(string event_name);
 	virtual void Receive(string event_name, bool value);
+	virtual void Receive(string event_name, string string_name);
 	virtual void Receive(string event_name, int value);
 	virtual void Receive(string event_name, float value);
 	virtual void Receive(string event_name, Vector2 value);
