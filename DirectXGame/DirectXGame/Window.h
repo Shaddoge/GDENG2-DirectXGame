@@ -1,8 +1,9 @@
 #pragma once
+#define NOMINMAX
 #include <Windows.h>
 #include "EngineTime.h"
 #include "Mouse.h"
-#include "Vector2.h"
+#include "Vector2D.h"
 
 class Window
 {
@@ -27,8 +28,8 @@ public:
 	virtual void OnRMouseDown();
 	virtual void OnLMouseUp();
 	virtual void OnRMouseUp();
-	virtual void OnLMouseDrag(Vector2 delta_pos);
-	virtual void OnRMouseDrag(Vector2 delta_pos);
+	virtual void OnLMouseDrag(Vector2D delta_pos);
+	virtual void OnRMouseDrag(Vector2D delta_pos);
 	virtual void OnKeyDown(const char key);
 	virtual void OnKeyUp(const char key);
 	~Window();

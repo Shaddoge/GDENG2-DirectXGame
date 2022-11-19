@@ -1,21 +1,12 @@
 #pragma once
 #include <iostream>
 #include "GameObject.h"
-#include "EventManager.h"
 #include "Window.h"
 
-struct cube_vertex
-{
-	Vector3 position;
-	Vector3 position1;
-	Vector3 color;
-	Vector3 color1;
-};
-
-class Cube : public GameObject, EventListener
+class Cube : public GameObject
 {
 public:
-	Cube(string name);
+	Cube(String name, bool skipInit = false);
 	void Update(float delta_time) override;
 	void Draw(int width, int height) override;
 	~Cube();
@@ -29,6 +20,7 @@ private:
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
+	Texture* m_tex;
 private:
 	float m_angle = 0.0f;
 	float m_speed = 0.0f;

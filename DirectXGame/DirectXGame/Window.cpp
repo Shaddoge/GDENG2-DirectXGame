@@ -18,8 +18,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
     case WM_SIZE:
     {
-        Vector2 new_size = Vector2(window->GetClientWindowRect().right - window->GetClientWindowRect().left, window->GetClientWindowRect().bottom - window->GetClientWindowRect().top);
-        cout << new_size.x << "," << new_size.y << endl;
+        Vector2D new_size = Vector2D(window->GetClientWindowRect().right - window->GetClientWindowRect().left, window->GetClientWindowRect().bottom - window->GetClientWindowRect().top);
         window->OnResize(new_size.x, new_size.y);
         break;
     }
@@ -118,8 +117,8 @@ bool Window::Init()
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     wc.hInstance = NULL;
-    wc.lpszClassName = L"MyWindowClass";
-    wc.lpszMenuName = L"";
+    wc.lpszClassName = "MyWindowClass";
+    wc.lpszMenuName = "";
     wc.style = NULL;
     wc.lpfnWndProc = &WndProc ;
 
@@ -131,7 +130,7 @@ bool Window::Init()
         window = this;
 
     // Window creation
-    m_hwnd = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, L"MyWindowClass", L"DirectX Application", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+    m_hwnd = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, "MyWindowClass", "DirectX Application", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
         1600, 900, NULL, NULL, NULL, this);
     
     // If creation fails
@@ -223,11 +222,11 @@ void Window::OnRMouseUp()
 {
 }
 
-void Window::OnLMouseDrag(Vector2 delta_pos)
+void Window::OnLMouseDrag(Vector2D delta_pos)
 {
 }
 
-void Window::OnRMouseDrag(Vector2 delta_pos)
+void Window::OnRMouseDrag(Vector2D delta_pos)
 {
 }
 

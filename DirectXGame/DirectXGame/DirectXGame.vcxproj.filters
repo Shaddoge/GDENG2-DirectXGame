@@ -31,9 +31,6 @@
     <Filter Include="GameEngine\GraphicsEngine\ConstantBuffer">
       <UniqueIdentifier>{678005f7-170e-43cb-aca3-68aa48eebd08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\GameObjects">
-      <UniqueIdentifier>{d806ae6b-9efe-4b9a-b5f6-2be245d65a8f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\EngineTime">
       <UniqueIdentifier>{8ddd41d2-4bc4-44d3-9b4c-96b241e04571}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,27 @@
     </Filter>
     <Filter Include="GameEngine\UI\Image">
       <UniqueIdentifier>{759f77f8-8226-4c9f-934a-72eeeff1d2a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\ResourceManager">
+      <UniqueIdentifier>{80bd1695-7933-4867-8d5d-3077b9f004c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\ResourceManager\MeshManager">
+      <UniqueIdentifier>{51c11024-4b3d-466e-988d-4605f0f05452}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\ResourceManager\TextureManager">
+      <UniqueIdentifier>{e0f6f454-d3e6-4200-b19d-d230ccebdcda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Physics">
+      <UniqueIdentifier>{7448444b-62b4-41eb-9053-b53a0b2f0cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\ComponentSystem">
+      <UniqueIdentifier>{26dde8e5-4bb6-473b-9e8d-1042b7a5e2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GameObject">
+      <UniqueIdentifier>{d5742846-8c88-450e-9c09-86306d5b1937}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GameObject\GameObjects">
+      <UniqueIdentifier>{d806ae6b-9efe-4b9a-b5f6-2be245d65a8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,35 +120,29 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>GameEngine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>GameEngine\EventSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="EventListener.cpp">
-      <Filter>GameEngine\EventSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Quad.cpp">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
+    <ClCompile Include="Vector2D.cpp">
       <Filter>GameEngine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
+    <ClCompile Include="Vector3D.cpp">
       <Filter>GameEngine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix.cpp">
+    <ClCompile Include="Matrix4x4.cpp">
       <Filter>GameEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Plane.cpp">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Vector4.cpp">
       <Filter>GameEngine\Math</Filter>
@@ -169,6 +181,49 @@
       <Filter>GameEngine\UIScreen</Filter>
     </ClCompile>
     <ClCompile Include="ColorPicker.cpp" />
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>GameEngine\ResourceManager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>GameEngine\ResourceManager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>GameEngine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>GameEngine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>GameEngine\ResourceManager\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>GameEngine\ResourceManager\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshObj.cpp">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>GameEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponentSystem.cpp">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>GameEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsCube.cpp">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>GameEngine\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneCameraHandler.cpp" />
+    <ClCompile Include="PhysicsPlane.cpp">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -199,7 +254,7 @@
       <Filter>GameEngine\GraphicsEngine\ConstantBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="EngineTime.h">
       <Filter>GameEngine\GraphicsEngine\EngineTime</Filter>
@@ -210,32 +265,26 @@
     <ClInclude Include="Structs.h">
       <Filter>App</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>GameEngine\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="EventListener.h">
-      <Filter>GameEngine\EventSystem</Filter>
-    </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>GameEngine\GraphicsEngine\IndexBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="Vector3D.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="Vector2D.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
+    <ClInclude Include="Matrix4x4.h">
       <Filter>GameEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
-      <Filter>GameEngine\GameObjects</Filter>
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
       <Filter>GameEngine\Math</Filter>
@@ -283,6 +332,57 @@
       <Filter>GameEngine\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="MeshManager.h">
+      <Filter>GameEngine\ResourceManager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>GameEngine\ResourceManager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>GameEngine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>GameEngine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Prerequisites.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>GameEngine\ResourceManager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>GameEngine\ResourceManager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\tinyobjloader\include\tiny_obj_loader.h" />
+    <ClInclude Include="..\Libs\DirectXTex\include\DirectXTex.h" />
+    <ClInclude Include="VertexMesh.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshObj.h">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>GameEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponentSystem.h">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>GameEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsCube.h">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>GameEngine\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneCameraHandler.h" />
+    <ClInclude Include="PhysicsPlane.h">
+      <Filter>GameEngine\GameObject\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -291,5 +391,11 @@
     <FxCompile Include="PixelShader.hlsl">
       <Filter>App</Filter>
     </FxCompile>
+    <FxCompile Include="VertexMeshLayoutShader.hlsl">
+      <Filter>App</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Libs\DirectXTex\include\DirectXTex.inl" />
   </ItemGroup>
 </Project>

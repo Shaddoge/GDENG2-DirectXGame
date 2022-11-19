@@ -15,9 +15,9 @@ void EventManager::Initialize()
 	sharedInstance = new EventManager();
 }
 
-void EventManager::BindListener(string name, EventListener* listener)
+void EventManager::BindListener(String name, EventListener* listener)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		iterator->second.push_back(listener);
@@ -30,9 +30,9 @@ void EventManager::BindListener(string name, EventListener* listener)
 	}
 }
 
-void EventManager::UnbindListener(string name, EventListener* listener)
+void EventManager::UnbindListener(String name, EventListener* listener)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		iterator->second.remove(listener);
@@ -43,9 +43,9 @@ void EventManager::UnbindListener(string name, EventListener* listener)
 	}
 }
 
-void EventManager::Invoke(string name)
+void EventManager::Invoke(String name)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
@@ -55,9 +55,9 @@ void EventManager::Invoke(string name)
 	}
 }
 
-void EventManager::Invoke(string name, bool value)
+void EventManager::Invoke(String name, bool value)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
@@ -67,9 +67,9 @@ void EventManager::Invoke(string name, bool value)
 	}
 }
 
-void EventManager::Invoke(string name, string value)
+void EventManager::Invoke(String name, String value)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
@@ -79,9 +79,9 @@ void EventManager::Invoke(string name, string value)
 	}
 }
 
-void EventManager::Invoke(string name, int value)
+void EventManager::Invoke(String name, int value)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
@@ -91,9 +91,9 @@ void EventManager::Invoke(string name, int value)
 	}
 }
 
-void EventManager::Invoke(string name, float value)
+void EventManager::Invoke(String name, float value)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)
@@ -103,9 +103,9 @@ void EventManager::Invoke(string name, float value)
 	}
 }
 
-void EventManager::Invoke(string name, Vector2 value)
+void EventManager::Invoke(String name, Vector2D value)
 {
-	map<string, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
+	map<String, list<EventListener*>>::iterator iterator = sharedInstance->binded_events.find(name);
 	if (iterator != sharedInstance->binded_events.end())
 	{
 		for (auto const& listener : iterator->second)

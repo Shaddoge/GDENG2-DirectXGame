@@ -2,12 +2,10 @@
 
 ColorPicker::ColorPicker() : UIScreen("ColorPicker", false)
 {
-	//EventManager::BindListener("ColorPicker", this);
 }
 
 ColorPicker::~ColorPicker()
 {
-	//EventManager::UnbindListener("ColorPicker", this);
 }
 
 void ColorPicker::DrawUI()

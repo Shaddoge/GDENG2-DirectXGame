@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d11.h>
+#include "Prerequisites.h"
 
 class SwapChain;
 class VertexBuffer;
@@ -26,6 +27,8 @@ public:
 	void SetVertexShader(VertexShader* vertex_shader);
 	void SetPixelShader(PixelShader* pixel_shader);
 	
+	void SetTexture(VertexShader* vertex_shader, Texture* texture);
+	void SetTexture(PixelShader* pixel_shader, Texture* texture);
 
 	void SetConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void SetConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);

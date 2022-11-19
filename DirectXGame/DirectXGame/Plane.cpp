@@ -1,20 +1,44 @@
 #include "Plane.h"
 
-Plane::Plane(string name) : GameObject(name)
+Plane::Plane(String name) : GameObject(name, GameObject::PrimitiveType::PLANE)
 {
-	plane_vertex vertex_list[8] = {
-		// X - Y - Z						Color
+	m_tex = GraphicsEngine::Get()->GetTextureManager()->CreateTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	float plane_size = 1.0f;
+	std::cout << (m_tex == nullptr) << std::endl;
+	Vector3D position_list[] =
+	{
+		{Vector3D(-plane_size / 2,-0.0f, -plane_size / 2)},
+		{Vector3D(-plane_size / 2, 0.0f, -plane_size / 2)},
+		{Vector3D( plane_size / 2, 0.0f, -plane_size / 2)},
+		{Vector3D( plane_size / 2,-0.0f, -plane_size / 2)},
+
+		{Vector3D( plane_size / 2,-0.0f, plane_size / 2)},
+		{Vector3D( plane_size / 2, 0.0f, plane_size / 2)},
+		{Vector3D(-plane_size / 2, 0.0f, plane_size / 2)},
+		{Vector3D(-plane_size / 2,-0.0f, plane_size / 2)}
+	};
+
+	Vector2D texcoord_list[] =
+	{
+		{Vector2D(0.0f, 0.0f)},
+		{Vector2D(0.0f, 1.0f)},
+		{Vector2D(1.0f, 0.0f)},
+		{Vector2D(1.0f, 1.0f)},
+	};
+
+	vertex vertex_list[] = {
+		// X - Y - Z
 		// Front Face
-		{Vector3(-0.5f,-0.0f, -0.5f),	Vector3(0,0,0),		Vector3(0,0,0)},
-		{Vector3(-0.5f, 0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3( 0.5f, 0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3( 0.5f,-0.0f, -0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
+		{position_list[0], texcoord_list[1]},
+		{position_list[1], texcoord_list[0]},
+		{position_list[2], texcoord_list[2]},
+		{position_list[3], texcoord_list[3]},
 
 		// Back Face
-		{Vector3( 0.5f,-0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3( 0.5f, 0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3(-0.5f, 0.0f, 0.5f),	Vector3(1,1,1),		Vector3(1,1,1)},
-		{Vector3(-0.5f,-0.0f, 0.5f),	Vector3(0,0,0),		Vector3(0,0,0)}
+		{position_list[4], texcoord_list[1]},
+		{position_list[5], texcoord_list[0]},
+		{position_list[6], texcoord_list[2]},
+		{position_list[7], texcoord_list[3]},
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -52,7 +76,7 @@ Plane::Plane(string name) : GameObject(name)
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_vb->Load(&vertex_list, sizeof(plane_vertex), size_vertex_list, shader_byte_code, size_shader);
+	m_vb->Load(&vertex_list, sizeof(vertex), size_vertex_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
@@ -77,14 +101,14 @@ void Plane::Draw(int width, int height)
 {
 	constant cc;
 
-	Vector3 scale = GetScale();
+	Vector3D local_scale = GetLocalScale();
 	// Scale
 	cc.m_world.SetIdentity();
-	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
+	cc.m_world.SetScale(Vector3D(local_scale.x, local_scale.y, local_scale.z));
 
-	Vector3 local_rotation = GetLocalRotation();
-	// Temp Matrix
-	Matrix temp;
+	Vector3D local_rotation = GetLocalRotation();
+	// Temp Matrix4x4
+	Matrix4x4 temp;
 	// Rotation Z
 	temp.SetIdentity();
 	temp.SetRotationZ(local_rotation.z);
@@ -98,10 +122,10 @@ void Plane::Draw(int width, int height)
 	temp.SetRotationX(local_rotation.x);
 	cc.m_world *= temp;
 
-	Vector3 world_pos = GetWorldPosition();
+	Vector3D world_pos = GetLocalPosition();
 	// Translate
 	temp.SetIdentity();
-	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
+	temp.SetTranslate(Vector3D(world_pos.x, world_pos.y, world_pos.z));
 
 	cc.m_world *= temp;
 
@@ -120,6 +144,9 @@ void Plane::Draw(int width, int height)
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_vs);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_ps);
 
+	if (m_tex != nullptr)
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetTexture(m_ps, m_tex);
+
 	// Set Index Buffer
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_vb);
@@ -128,7 +155,6 @@ void Plane::Draw(int width, int height)
 
 Plane::~Plane()
 {
-	EventManager::UnbindListener("MouseMove", this);
 	m_vb->Release();
 	m_ib->Release();
 	m_cb->Release();

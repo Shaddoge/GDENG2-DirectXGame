@@ -2,12 +2,10 @@
 
 CreditsScreen::CreditsScreen() : UIScreen("CreditsScreen", false)
 {
-	//EventManager::BindListener("ToggleCreditsScreen", this);
 }
 
 CreditsScreen::~CreditsScreen()
 {
-	//EventManager::UnbindListener("ToggleCreditsScreen", this);
 }
 
 void CreditsScreen::DrawUI()

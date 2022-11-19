@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>Libs\DirectXTex\include;Libs\tinyobjloader\include;Libs\ReactPhysics3D\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Libs\DirectXTex\bin;Libs\ReactPhysics3D\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -102,13 +106,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3dcompiler.lib;d3d11.lib;DirectXTexD.lib;reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,16 +134,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp" />
+    <ClCompile Include="BaseComponentSystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="CreditsScreen.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DeviceContext.cpp" />
     <ClCompile Include="EngineTime.cpp" />
-    <ClCompile Include="EventListener.cpp" />
-    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -148,36 +154,51 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Matrix.cpp">
+    <ClCompile Include="Matrix4x4.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MenuBar.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="MeshObj.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="PhysicsCube.cpp" />
+    <ClCompile Include="PhysicsPlane.cpp" />
+    <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SceneCameraHandler.cpp" />
     <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIScreen.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Libs\DirectXTex\include\DirectXTex.h" />
+    <ClInclude Include="..\Libs\tinyobjloader\include\tiny_obj_loader.h" />
     <ClInclude Include="AppWindow.h" />
+    <ClInclude Include="BaseComponentSystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="CreditsScreen.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DeviceContext.h" />
     <ClInclude Include="EngineTime.h" />
-    <ClInclude Include="EventListener.h" />
-    <ClInclude Include="EventManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -188,23 +209,37 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="ImGui\stb_image.h" />
     <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="Matrix.h">
+    <ClInclude Include="Matrix4x4.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="MenuBar.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="MeshObj.h" />
+    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="PhysicsCube.h" />
+    <ClInclude Include="PhysicsPlane.h" />
+    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Prerequisites.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SceneCameraHandler.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="SwapChain.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIScreen.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexMesh.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -216,6 +251,13 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="VertexMeshLayoutShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -224,7 +266,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Libs\DirectXTex\include\DirectXTex.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

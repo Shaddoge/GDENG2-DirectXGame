@@ -1,20 +1,12 @@
 #pragma once
 #include <iostream>
 #include "GameObject.h"
-#include "EventManager.h"
 #include "Window.h"
 
-struct plane_vertex
-{
-	Vector3 position;
-	Vector3 color;
-	Vector3 color1;
-};
-
-class Plane : public GameObject, EventListener
+class Plane : public GameObject
 {
 public:
-	Plane(string name);
+	Plane(String name);
 	void Update(float delta_time) override;
 	void Draw(int width, int height) override;
 	~Plane();
@@ -28,6 +20,7 @@ private:
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
+	Texture* m_tex;
 private:
 	float m_angle = 0.0f;
 	float m_speed = 0.0f;

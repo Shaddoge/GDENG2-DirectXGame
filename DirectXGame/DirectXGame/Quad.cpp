@@ -1,13 +1,29 @@
 #include "Quad.h"
 
-Quad::Quad(string name) : GameObject(name)
+Quad::Quad(String name) : GameObject(name, GameObject::PrimitiveType::QUAD)
 {
-	quad_vertex vertex_list[4] = {
+	Vector3D position_list[] =
+	{
+		{Vector3D(-0.25f,-0.25f, 0.0f)},
+		{Vector3D(-0.25f, 0.25f, 0.0f)},
+		{Vector3D(0.25f,-0.25f, 0.0f)},
+		{Vector3D(0.25f, 0.25f, 0.0f)},
+	};
+
+	Vector2D texcoord_list[] =
+	{
+		{Vector2D(0.0f, 0.0f)},
+		{Vector2D(0.0f, 1.0f)},
+		{Vector2D(1.0f, 0.0f)},
+		{Vector2D(1.0f, 1.0f)},
+	};
+
+	vertex vertex_list[4] = {
 		// X - Y - Z					Color
-		{Vector3(-0.25f,-0.25f, 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-0.25f, 0.25f, 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(0.25f,-0.25f, 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(0.25f, 0.25f, 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
+		{position_list[0], texcoord_list[0]},
+		{position_list[1], texcoord_list[1]},
+		{position_list[2], texcoord_list[2]},
+		{position_list[3], texcoord_list[3]},
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -34,19 +50,19 @@ Quad::Quad(string name) : GameObject(name)
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(string name, Vector3 position) : GameObject(name)
+Quad::Quad(String name, Vector3D position) : GameObject(name, GameObject::PrimitiveType::QUAD)
 {
 	SetPosition(position);
-	Vector2 dimension = Vector2(1.0f, 1.0f);
+	Vector2D dimension = Vector2D(1.0f, 1.0f);
 	float x_half = dimension.x / 2;
 	float y_half = dimension.y / 2;
 
 	quad_vertex vertex_list[4] = {
 		// X - Y - Z					Color
-		{Vector3(-x_half,-y_half , 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-x_half, y_half , 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(x_half ,-y_half , 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(x_half , y_half , 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
+		{Vector3D(-x_half,-y_half , 0.0f),	Vector3D(1,0,0),	Vector3D(0,0,1)},
+		{Vector3D(-x_half, y_half , 0.0f),	Vector3D(0,1,0),	Vector3D(0,1,1)},
+		{Vector3D(x_half ,-y_half , 0.0f),	Vector3D(0,0,1),	Vector3D(1,0,0)},
+		{Vector3D(x_half , y_half , 0.0f),	Vector3D(0,0,0),	Vector3D(1,1,1)}
 	};
 
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -74,18 +90,17 @@ Quad::Quad(string name, Vector3 position) : GameObject(name)
 }
 
 // With offset positioning
-Quad::Quad(string name, Vector2 dimension) : GameObject(name)
+Quad::Quad(String name, Vector2D dimension) : GameObject(name, GameObject::PrimitiveType::QUAD)
 {
-	//EventManager::BindEvent("MouseMove", this);
 	float x_half = dimension.x / 2;
 	float y_half = dimension.y / 2;
 	quad_vertex vertex_list[4] = {
 		
 		// X - Y - Z													Color
-		{Vector3(-x_half,-y_half , 0.0f),	Vector3(1,0,0),	Vector3(0,0,1)},
-		{Vector3(-x_half, y_half , 0.0f),	Vector3(0,1,0),	Vector3(0,1,1)},
-		{Vector3(x_half ,-y_half , 0.0f),	Vector3(0,0,1),	Vector3(1,0,0)},
-		{Vector3(x_half , y_half , 0.0f),	Vector3(0,0,0),	Vector3(1,1,1)}
+		{Vector3D(-x_half,-y_half , 0.0f),	Vector3D(1,0,0),	Vector3D(0,0,1)},
+		{Vector3D(-x_half, y_half , 0.0f),	Vector3D(0,1,0),	Vector3D(0,1,1)},
+		{Vector3D(x_half ,-y_half , 0.0f),	Vector3D(0,0,1),	Vector3D(1,0,0)},
+		{Vector3D(x_half , y_half , 0.0f),	Vector3D(0,0,0),	Vector3D(1,1,1)}
 	};
 	
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -112,9 +127,8 @@ Quad::Quad(string name, Vector2 dimension) : GameObject(name)
 	m_cb->Load(&cc, sizeof(constant));
 }
 
-Quad::Quad(string name, quad_vertex vertex_list[4]) : GameObject(name)
+Quad::Quad(String name, quad_vertex vertex_list[4]) : GameObject(name, GameObject::PrimitiveType::QUAD)
 {
-	//EventManager::BindEvent("MouseMove", this);
 	m_vb = GraphicsEngine::Get()->CreateVertexBuffer();
 	UINT size_list = 4;
 
@@ -149,14 +163,14 @@ void Quad::Draw(int width, int height)
 {
 	constant cc;
 
-	Vector3 scale = GetScale();
+	Vector3D local_scale = GetLocalScale();
 	// Scale
 	cc.m_world.SetIdentity();
-	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
+	cc.m_world.SetScale(Vector3D(local_scale.x, local_scale.y, local_scale.z));
 
-	Vector3 local_rotation = GetLocalRotation();
-	// Temp Matrix
-	Matrix temp;
+	Vector3D local_rotation = GetLocalRotation();
+	// Temp Matrix4x4
+	Matrix4x4 temp;
 	// Rotation Z
 	temp.SetIdentity();
 	temp.SetRotationZ(local_rotation.z);
@@ -170,10 +184,10 @@ void Quad::Draw(int width, int height)
 	temp.SetRotationX(local_rotation.x);
 	cc.m_world *= temp;
 
-	Vector3 world_pos = GetWorldPosition();
+	Vector3D world_pos = GetLocalPosition();
 	// Translate
 	temp.SetIdentity();
-	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
+	temp.SetTranslate(Vector3D(world_pos.x, world_pos.y, world_pos.z));
 
 	cc.m_world *= temp;
 

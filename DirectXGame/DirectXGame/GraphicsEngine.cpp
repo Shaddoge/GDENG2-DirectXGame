@@ -12,6 +12,26 @@
 
 GraphicsEngine::GraphicsEngine()
 {
+    try
+    {
+        m_tex_manager = new TextureManager();
+    }
+    catch (...) { throw std::exception("Texture Manager not created successfully"); }
+
+    try
+    {
+        m_mesh_manager = new MeshManager();
+    }
+    catch (...) { throw std::exception("Mesh Manager not created successfully"); }
+
+    void* shader_byte_code = nullptr;
+    size_t size_shader = 0;
+
+    // Vertex Shader
+    CompileVertexShader(L"VertexMeshLayoutShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+    ::memcpy(m_mesh_layout_byte_code, shader_byte_code, size_shader);
+    m_mesh_layout_size = size_shader;
+    ReleaseCompiledShader();
 }
 
 bool GraphicsEngine::Init()
@@ -77,6 +97,8 @@ bool GraphicsEngine::Release()
 
 GraphicsEngine::~GraphicsEngine()
 {
+    delete m_tex_manager;
+    delete m_mesh_manager;
 }
 
 SwapChain* GraphicsEngine::CreateSwapChain()
@@ -99,9 +121,33 @@ VertexBuffer* GraphicsEngine::CreateVertexBuffer()
     return new VertexBuffer();
 }
 
+VertexBuffer* GraphicsEngine::CreateVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list,
+    void* shader_byte_code, UINT size_byte_shader)
+{
+
+    VertexBuffer* vb = nullptr;
+    try
+    {
+        vb = new VertexBuffer(list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+    }
+    catch (...) {}
+    return vb;
+}
+
 IndexBuffer* GraphicsEngine::CreateIndexBuffer()
 {
     return new IndexBuffer();
+}
+
+IndexBuffer* GraphicsEngine::CreateIndexBuffer(void* list_indices, UINT size_list)
+{
+    IndexBuffer* ib = nullptr;
+    try
+    {
+        ib = new IndexBuffer(list_indices, size_list);
+    }
+    catch (...) {}
+    return ib;
 }
 
 ConstantBuffer* GraphicsEngine::CreateConstantBuffer()
@@ -168,6 +214,22 @@ bool GraphicsEngine::CompilePixelShader(const wchar_t* file_name, const char* en
 void GraphicsEngine::ReleaseCompiledShader()
 {
     if (m_blob) m_blob->Release();
+}
+
+TextureManager* GraphicsEngine::GetTextureManager()
+{
+    return m_tex_manager;
+}
+
+MeshManager* GraphicsEngine::GetMeshManager()
+{
+    return m_mesh_manager;
+}
+
+void GraphicsEngine::GetVertexMeshLayoutShaderByteCodeAndSize(void** byte_code, size_t* size)
+{
+    *byte_code = m_mesh_layout_byte_code;
+    *size = m_mesh_layout_size;
 }
 
 GraphicsEngine* GraphicsEngine::Get()

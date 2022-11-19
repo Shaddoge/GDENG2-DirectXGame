@@ -1,23 +1,22 @@
 #pragma once
 #include <iostream>
 #include "GameObject.h"
-#include "EventManager.h"
 #include "Window.h"
 
 struct quad_vertex
 {
-	Vector3 position;
-	Vector3 color;
-	Vector3 color1;
+	Vector3D position;
+	Vector3D color;
+	Vector3D color1;
 };
 
 class Quad : public GameObject
 {
 public:
-	Quad(string name);
-	Quad(string name, Vector3 position);
-	Quad(string name, Vector2 dimension);
-	Quad(string name, quad_vertex vertex_list[4]);
+	Quad(String name);
+	Quad(String name, Vector3D position);
+	Quad(String name, Vector2D dimension);
+	Quad(String name, quad_vertex vertex_list[4]);
 	void Update(float delta_time) override;
 	void Draw(int width, int height) override;
 	~Quad();

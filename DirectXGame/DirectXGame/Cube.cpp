@@ -1,38 +1,96 @@
 #include "Cube.h"
 
-Cube::Cube(string name) : GameObject(name)
+Cube::Cube(String name, bool skipInit) : GameObject(name, GameObject::CUBE)
 {
-	// Outline
-	float cube_size = 1.0f;
-	float outline_scale = 1.1f;
-	cube_vertex vertex_list_outline[8] = {
-		// X - Y - Z						Color
-		// Front Face
-		{Vector3(-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3(-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3( (cube_size/2) * outline_scale, (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3( (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
+	if (skipInit) {
+		return;
+	}
 
-		// Back Face
-		{Vector3( (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3( (cube_size/2) * outline_scale, (cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3(-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)},
-		{Vector3(-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3(1,0.5,0),	Vector3(1,0.5,0)}
+	// Outline
+	float cube_size = 2.0f;
+	float outline_scale = 1.1f;
+
+	m_tex = GraphicsEngine::Get()->GetTextureManager()->CreateTextureFromFile(L"Assets\\Textures\\wood.jpg");
+
+	Vector3D position_list[] =
+	{
+		{Vector3D(-(cube_size / 2),-(cube_size / 2), -(cube_size / 2))},
+		{Vector3D(-(cube_size / 2), (cube_size / 2), -(cube_size / 2))},
+		{Vector3D((cube_size / 2), (cube_size / 2), -(cube_size / 2))},
+		{Vector3D((cube_size / 2),-(cube_size / 2), -(cube_size / 2))},
+
+		{Vector3D((cube_size / 2),-(cube_size / 2), (cube_size / 2))},
+		{Vector3D((cube_size / 2), (cube_size / 2), (cube_size / 2))},
+		{Vector3D(-(cube_size / 2), (cube_size / 2), (cube_size / 2))},
+		{Vector3D(-(cube_size / 2),-(cube_size / 2), (cube_size / 2))}
 	};
 
-	cube_vertex vertex_list[8] = {
+	Vector2D texcoord_list[] =
+	{
+		{Vector2D(0.0f, 0.0f)},
+		{Vector2D(0.0f, 1.0f)},
+		{Vector2D(1.0f, 0.0f)},
+		{Vector2D(1.0f, 1.0f)},
+	};
+
+	Vector3D color_list[] =
+	{
+		{Vector3D(1,0.5,0)},
+		{Vector3D(0,1,0)},
+		{Vector3D(0,0,1)},
+		{Vector3D(0,0,0)},
+
+		{Vector3D(1,0,1)},
+		{Vector3D(0,1,1)},
+		{Vector3D(1,1,0)},
+		{Vector3D(1,1,1)},
+	};
+
+	/*vertex vertex_list_outline[8] = {
 		// X - Y - Z						Color
 		// Front Face
-		{Vector3(-(cube_size/2),-(cube_size/2), -(cube_size/2)),Vector3(1,0,0),		Vector3(1,0,0)},
-		{Vector3(-(cube_size/2), (cube_size/2), -(cube_size/2)),Vector3(0,1,0),		Vector3(0,1,0)},
-		{Vector3( (cube_size/2), (cube_size/2), -(cube_size/2)),Vector3(0,0,1),		Vector3(0,0,1)},
-		{Vector3( (cube_size/2),-(cube_size/2), -(cube_size/2)),Vector3(0,0,0),		Vector3(0,0,0)},
+		{Vector3D(-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D(-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D( (cube_size/2) * outline_scale, (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D( (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
 
 		// Back Face
-		{Vector3( (cube_size/2),-(cube_size/2), (cube_size/2)), Vector3(1,0,1),		Vector3(1,0,1)},
-		{Vector3( (cube_size/2), (cube_size/2), (cube_size/2)), Vector3(0,1,1),		Vector3(0,1,1)},
-		{Vector3(-(cube_size/2), (cube_size/2), (cube_size/2)), Vector3(1,1,0),		Vector3(1,1,0)},
-		{Vector3(-(cube_size/2),-(cube_size/2), (cube_size/2)), Vector3(1,1,1),		Vector3(1,1,1)}
+		{Vector3D( (cube_size/2) * outline_scale,-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D( (cube_size/2) * outline_scale, (cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D(-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)},
+		{Vector3D(-(cube_size/2) * outline_scale,-(cube_size/2) * outline_scale, (cube_size/2) * outline_scale),	Vector3D(1,0.5,0),	Vector3D(1,0.5,0)}
+	};*/
+
+	vertex vertex_list[] = {
+		{position_list[0], texcoord_list[1]},
+		{position_list[1], texcoord_list[0]},
+		{position_list[2], texcoord_list[2]},
+		{position_list[3], texcoord_list[3]},
+		
+		{position_list[4], texcoord_list[1]},
+		{position_list[5], texcoord_list[0]},
+		{position_list[6], texcoord_list[2]},
+		{position_list[7], texcoord_list[3]},
+
+		{position_list[1], texcoord_list[1]},
+		{position_list[6], texcoord_list[0]},
+		{position_list[5], texcoord_list[2]},
+		{position_list[2], texcoord_list[3]},
+
+		{position_list[7], texcoord_list[1]},
+		{position_list[0], texcoord_list[0]},
+		{position_list[3], texcoord_list[2]},
+		{position_list[4], texcoord_list[3]},
+
+		{position_list[3], texcoord_list[1]},
+		{position_list[2], texcoord_list[0]},
+		{position_list[5], texcoord_list[2]},
+		{position_list[4], texcoord_list[3]},
+
+		{position_list[7], texcoord_list[1]},
+		{position_list[6], texcoord_list[0]},
+		{position_list[1], texcoord_list[2]},
+		{position_list[0], texcoord_list[3]},
 	};
 
 	//m_vb_outline = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -47,17 +105,17 @@ Cube::Cube(string name) : GameObject(name)
 		4,5,6,
 		6,7,4,
 		// Top
-		1,6,5,
-		5,2,1,
+		8,9,10,
+		10,11,8,
 		// Bottom
-		7,0,3,
-		3,4,7,
+		12,13,14,
+		14,15,12,
 		// Right
-		3,2,5,
-		5,4,3,
+		16,17,18,
+		18,19,16,
 		// Left
-		7,6,1,
-		1,0,7
+		20,21,22,
+		22,23,20
 	};
 
 	m_ib = GraphicsEngine::Get()->CreateIndexBuffer();
@@ -72,7 +130,7 @@ Cube::Cube(string name) : GameObject(name)
 	GraphicsEngine::Get()->CompileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	m_vs = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
 	//m_vb_outline->Load(&vertex_list_outline, sizeof(cube_vertex), size_vertex_list, shader_byte_code, size_shader);
-	m_vb->Load(&vertex_list, sizeof(cube_vertex), size_vertex_list, shader_byte_code, size_shader);
+	m_vb->Load(&vertex_list, sizeof(vertex), size_vertex_list, shader_byte_code, size_shader);
 
 	// Pixel Shader
 	GraphicsEngine::Get()->CompilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
@@ -92,13 +150,13 @@ void Cube::Update(float delta_time)
 	m_angle += 1.57f * delta_time;
 	m_delta_scale += delta_time * m_speed;
 
-	//Vector3 world_position = GetWorldPosition();
-	//this->SetPosition(world_position.lerp(Vector3(-1.0f, -1.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), sin(m_delta_scale)));
+	//Vector3D local_position = GetLocalPosition();
+	//this->SetPosition(local_position.lerp(Vector3D(-1.0f, -1.0f, 0.0f), Vector3D(1.0f, 1.0f, 0.0f), sin(m_delta_scale)));
 
-	//Vector3 scale = GetScale();
-	//this->SetScale(scale.lerp(Vector3(1.0f, 1.0f, 1.0f), Vector3(2.0f, 0.0f, 2.0f), abs(sin(m_delta_scale))));
+	//Vector3D local_scale = GetLocalScale();
+	//this->SetScale(local_scale.lerp(Vector3D(1.0f, 1.0f, 1.0f), Vector3D(2.0f, 0.0f, 2.0f), abs(sin(m_delta_scale))));
 	
-	//Vector3 local_rotation = GetLocalRotation();
+	//Vector3D local_rotation = GetLocalRotation();
 	//this->SetRotation(m_delta_scale, m_delta_scale, m_delta_scale);
 }
 
@@ -106,14 +164,14 @@ void Cube::Draw(int width, int height)
 {
 	constant cc;
 	
-	Vector3 scale = GetScale();
+	Vector3D local_scale = GetLocalScale();
 	// Scale
 	cc.m_world.SetIdentity();
-	cc.m_world.SetScale(Vector3(scale.x, scale.y, scale.z));
+	cc.m_world.SetScale(Vector3D(local_scale.x, local_scale.y, local_scale.z));
 
-	Vector3 local_rotation = GetLocalRotation();
-	// Temp Matrix
-	Matrix temp;
+	Vector3D local_rotation = GetLocalRotation();
+	// Temp Matrix4x4
+	Matrix4x4 temp;
 	// Rotation Z
 	temp.SetIdentity();
 	temp.SetRotationZ(local_rotation.z);
@@ -127,11 +185,11 @@ void Cube::Draw(int width, int height)
 	temp.SetRotationX(local_rotation.x);
 	cc.m_world *= temp;
 
-	Vector3 world_pos = GetWorldPosition();
+	Vector3D world_pos = GetLocalPosition();
 	// Translate
 	temp.SetIdentity();
-	temp.SetTranslate(Vector3(world_pos.x, world_pos.y, world_pos.z));
-
+	temp.SetTranslate(Vector3D(world_pos.x, world_pos.y, world_pos.z));
+	
 	cc.m_world *= temp;
 
 	cc.m_view.SetIdentity();
@@ -149,6 +207,9 @@ void Cube::Draw(int width, int height)
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_vs);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_ps);
 	
+	if (m_tex != nullptr)
+		GraphicsEngine::Get()->GetImmediateDeviceContext()->SetTexture(m_ps, m_tex);
+
 	// Set Index Buffer
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_ib);
 	
@@ -165,7 +226,6 @@ void Cube::Draw(int width, int height)
 
 Cube::~Cube()
 {
-	EventManager::UnbindListener("MouseMove", this);
 	//m_vb_outline->Release();
 	m_vb->Release();
 	m_ib->Release();

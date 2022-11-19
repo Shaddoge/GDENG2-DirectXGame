@@ -10,8 +10,9 @@
 #include "Mouse.h"
 #include "Quad.h"
 #include "Cube.h"
+#include "PhysicsCube.h"
 #include "Plane.h"
-#include "EventManager.h"
+#include "MeshObj.h"
 #include "Camera.h"
 #include "UIManager.h"
 #include <vector>
@@ -38,8 +39,8 @@ public:
 	virtual void OnResize(int width, int height) override;
 	virtual void OnRMouseDown() override;
 	virtual void OnRMouseUp() override;
-	virtual void OnLMouseDrag(Vector2 delta_pos) override;
-	virtual void OnRMouseDrag(Vector2 delta_pos) override;
+	virtual void OnLMouseDrag(Vector2D delta_pos) override;
+	virtual void OnRMouseDrag(Vector2D delta_pos) override;
 	virtual void OnKeyDown(const char key) override;
 	virtual void OnKeyUp(const char key) override;
 private:
@@ -49,11 +50,6 @@ private:
 private:
 	int width, height;
 	TransformMode transform_mode = TransformMode::TRANSLATE;
-
-	Camera* scene_camera;
-	vector<Quad*> quads;
-	vector<Cube*> cubes;
-	vector<Plane*> planes;
 
 	float delta_time = 0.0f;
 	int selected_obj = 0;

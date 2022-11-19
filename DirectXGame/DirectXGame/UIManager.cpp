@@ -16,6 +16,7 @@ void UIManager::Destroy()
 {
 }
 
+
 void UIManager::ToggleUI(String name)
 {
 	if (this->uiTable[name] != nullptr)
@@ -72,5 +73,4 @@ UIManager::UIManager(HWND hwnd)
 
 UIManager::~UIManager()
 {
-	//EventManager::UnbindListener("ToggleCreditsScreen", );
 }

@@ -7,6 +7,7 @@ class IndexBuffer
 {
 public:
 	IndexBuffer();
+	IndexBuffer(void* list_indices, UINT size_list);
 	bool Load(void* list_indices, UINT size_list);
 	UINT GetSizeIndexList();
 	bool Release();

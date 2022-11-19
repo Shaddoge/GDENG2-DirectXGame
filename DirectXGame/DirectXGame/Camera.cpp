@@ -1,10 +1,11 @@
 #include "Camera.h"
 #include <stdio.h>
-Camera::Camera(string name) : GameObject(name)
+Camera::Camera(String name) : GameObject(name, GameObject::PrimitiveType::CAMERA)
 {
 	// Initialize position and rotation of camera
-	SetRotation(Vector3(0.5f, -0.9f, 0.0f));
-	world_cam.SetTranslate(Vector3(5.0, 3.5f, -2.5f));
+	//SetRotation(Vector3D(0.5f, -0.9f, 0.0f));
+	//world_cam.SetTranslate(Vector3D(5.0, 3.5f, -2.5f));
+	world_cam.SetTranslate(Vector3D(0.0, 0.5f, -2.5f));
 }
 
 Camera::~Camera()
@@ -13,11 +14,11 @@ Camera::~Camera()
 
 void Camera::Update(float delta_time)
 {
-	Matrix new_world_cam;
+	Matrix4x4 new_world_cam;
 	new_world_cam.SetIdentity();
 
-	Matrix temp;
-	Vector3 local_rotation = GetLocalRotation();
+	Matrix4x4 temp;
+	Vector3D local_rotation = GetLocalRotation();
 	temp.SetIdentity();
 	temp.SetRotationX(local_rotation.x);
 	new_world_cam *= temp;
@@ -27,7 +28,7 @@ void Camera::Update(float delta_time)
 	new_world_cam *= temp;
 
 	// Forward
-	Vector3 new_pos = world_cam.GetTranslation() + world_cam.GetZDirection() * (forward * translate_speed);
+	Vector3D new_pos = world_cam.GetTranslation() + world_cam.GetZDirection() * (forward * translate_speed);
 	// Right
 	new_pos = new_pos + world_cam.GetXDirection() * (right * translate_speed);
 	// Top
@@ -37,9 +38,14 @@ void Camera::Update(float delta_time)
 	world_cam = new_world_cam;
 }
 
-Matrix Camera::GetInverseWorldCam()
+Matrix4x4 Camera::GetViewMatrix()
 {
-	Matrix inverse_world_cam = world_cam;
+	return Matrix4x4();
+}
+
+Matrix4x4 Camera::GetInverseWorldCam()
+{
+	Matrix4x4 inverse_world_cam = world_cam;
 	inverse_world_cam.Inverse();
 	return inverse_world_cam;
 }
@@ -59,9 +65,29 @@ void Camera::SetTop(float value)
 	top = value;
 }
 
-void Camera::SetRotationMouse(Vector2 delta_pos)
+void Camera::SetRotationMouse(Vector2D delta_pos)
 {
 	delta_pos *= look_speed;
-	Vector3 local_rotation = GetLocalRotation();
-	SetRotation(Vector3(local_rotation.x - delta_pos.y, local_rotation.y + delta_pos.x, local_rotation.z));
+	Vector3D local_rotation = GetLocalRotation();
+	SetRotation(Vector3D(local_rotation.x - delta_pos.y, local_rotation.y + delta_pos.x, local_rotation.z));
+}
+
+void Camera::UpdateViewMatrix()
+{
+	Matrix4x4 worldCam; worldCam.SetIdentity();
+	Matrix4x4 temp; temp.SetIdentity();
+
+	Vector3D localRot = this->GetLocalRotation();
+
+	temp.SetRotationX(localRot.x);
+	worldCam = worldCam.MultiplyTo(temp);
+
+	temp.SetRotationY(localRot.y);
+	worldCam = worldCam.MultiplyTo(temp);
+
+	temp.SetTranslate(this->GetLocalPosition());
+	worldCam = worldCam.MultiplyTo(temp);
+
+	worldCam.Inverse();
+	this->localMatrix = worldCam;
 }
